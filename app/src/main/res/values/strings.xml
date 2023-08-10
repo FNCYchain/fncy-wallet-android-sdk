@@ -1,0 +1,8 @@
+<resources>
+    //todo: change this to your api key
+    <string name="app_name">fncy-wallet-android-sdk</string>
+    <string name="api_key">u85nen5n3mt21hbljt2dtoiest8fpy8u</string>
+    <string name="base_url_dev">https://devx-apis.cubeapi.io</string>
+    <string name="base_url_qa">https://qax-apis.cubeapi.io</string>
+    <string name="base_url_live">https://apis.cubeapi.io</string>
+</resources>
