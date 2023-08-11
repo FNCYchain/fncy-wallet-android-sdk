@@ -11,10 +11,10 @@ import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTrans
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletAnswerCreation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletCreation
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
+import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
+import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
 import com.metaverse.world.wallet.sdk.model.wallet.FncyMessageSign
 import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
-import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
-import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
 import com.metaverse.world.wallet.sdk.model.wallet.FncyWallet
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType2

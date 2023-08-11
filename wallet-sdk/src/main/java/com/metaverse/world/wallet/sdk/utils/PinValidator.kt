@@ -7,7 +7,7 @@ class PinValidator {
     private val pinPattern by lazy {
         Pattern.compile("^[0-9]{6}$")
     }
-    fun check(pin: String): Boolean {
+    fun valid(pin: String): Boolean {
         return pinPattern.matcher(pin).matches()
     }
 }

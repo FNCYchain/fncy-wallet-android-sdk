@@ -13,7 +13,7 @@ import org.koin.dsl.module
 
 internal fun repositoryModule() = module {
     factory<FncyWalletRepository> {
-        FncyWalletRepositoryImpl(get(), get(), get(), get(), get(named("IoDispatcher")))
+        FncyWalletRepositoryImpl(get(), get(), get(), get(), get(), get(named("IoDispatcher")))
     }
 
     factory<FncyAccountRepository> {
@@ -25,6 +25,6 @@ internal fun repositoryModule() = module {
     }
 
     factory<FncyTransactionRepository> {
-        FncyTransactionRepositoryImpl(get(), get(), get(), get(), get(named("IoDispatcher")))
+        FncyTransactionRepositoryImpl(get(), get(), get(), get(), get(), get(named("IoDispatcher")))
     }
 }

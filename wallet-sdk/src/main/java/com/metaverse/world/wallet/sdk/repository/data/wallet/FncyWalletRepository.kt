@@ -1,6 +1,6 @@
 package com.metaverse.world.wallet.sdk.repository.data.wallet
 
-import com.metaverse.world.wallet.sdk.crypto.EncryptDataManager
+import com.metaverse.world.wallet.sdk.crypto.FncyEncryptManager
 import com.metaverse.world.wallet.sdk.model.request.FncyRequest
 import com.metaverse.world.wallet.sdk.model.request.internal.ReqCheckResetAnswer
 import com.metaverse.world.wallet.sdk.model.request.internal.ReqCheckWalletPin
@@ -22,15 +22,16 @@ import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalle
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletCreation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletId
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
-import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
-import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
 import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
+import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
+import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
 import com.metaverse.world.wallet.sdk.model.wallet.FncyWallet
 import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountDataSource
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
 import com.metaverse.world.wallet.sdk.repository.network.response.Paging
 import com.metaverse.world.wallet.sdk.repository.network.response.PagingData
 import com.metaverse.world.wallet.sdk.repository.network.response.toParamMap
+import com.metaverse.world.wallet.sdk.utils.PinValidator
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
 import kotlinx.coroutines.CoroutineDispatcher
@@ -120,7 +121,8 @@ internal class FncyWalletRepositoryImpl(
     private val fncyWalletDataSource: FncyWalletDataSource,
     private val fncyAccountDataSource: FncyAccountDataSource,
     private val apiResultParser: ApiResultParser,
-    private val encryptDataManager: EncryptDataManager,
+    private val fncyEncryptManager: FncyEncryptManager,
+    private val pinValidator: PinValidator,
     private val ioDispatcher: CoroutineDispatcher,
 ) : FncyWalletRepository, KoinComponent {
     init {
@@ -165,13 +167,17 @@ internal class FncyWalletRepositoryImpl(
     override suspend fun requestPasswordValidation(
         request: FncyRequest<ReqCheckWalletPin>
     ): Result<Unit> = withContextRun(ioDispatcher) {
+        check(pinValidator.valid(request.params.pinNumber)) {
+            "Invalid pin number."
+        }
+
         val rsaKey = apiResultParser.parse(
             fncyAccountDataSource.requestRsaKey(
                 request.accessToken.toHeader()
             )
         ).userRsaPubKey
 
-        val encryptPin = encryptDataManager.encrypt(
+        val encryptPin = fncyEncryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 2
@@ -190,13 +196,17 @@ internal class FncyWalletRepositoryImpl(
     override suspend fun requestWalletCreation(
         request: FncyRequest<ReqMakeWallet>
     ): Result<Unit> = withContextRun(ioDispatcher) {
+        check(pinValidator.valid(request.params.pinNumber)) {
+            "Invalid pin number."
+        }
+
         val rsaKey = apiResultParser.parse(
             fncyAccountDataSource.requestRsaKey(
                 request.accessToken.toHeader()
             )
         ).userRsaPubKey
 
-        val encryptPin = encryptDataManager.encrypt(
+        val encryptPin = fncyEncryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -217,19 +227,26 @@ internal class FncyWalletRepositoryImpl(
     override suspend fun requestWalletPasswordChange(
         request: FncyRequest<ReqResetWalletPin>
     ): Result<Unit> = withContextRun(ioDispatcher) {
+        check(pinValidator.valid(request.params.oldPinNumber)) {
+            "Invalid old pin number."
+        }
+        check(pinValidator.valid(request.params.newPinNumber)) {
+            "Invalid new pin number."
+        }
+
         val rsaKey = apiResultParser.parse(
             fncyAccountDataSource.requestRsaKey(
                 request.accessToken.toHeader()
             )
         ).userRsaPubKey
 
-        val encryptPin = encryptDataManager.encrypt(
+        val encryptPin = fncyEncryptManager.encrypt(
             plainData = request.params.oldPinNumber,
             rsaKey = rsaKey,
             count = 1
         )
 
-        val encryptNewPin = encryptDataManager.encrypt(
+        val encryptNewPin = fncyEncryptManager.encrypt(
             plainData = request.params.newPinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -268,13 +285,13 @@ internal class FncyWalletRepositoryImpl(
             )
         ).userRsaPubKey
 
-        val encryptAnswer = encryptDataManager.encrypt(
+        val encryptAnswer = fncyEncryptManager.encrypt(
             plainData = request.params.answer.lowercase(),
             rsaKey = rsaKey,
             count = 2
         )
 
-        val encryptAnswerAlter = encryptDataManager.encrypt(
+        val encryptAnswerAlter = fncyEncryptManager.encrypt(
             plainData = request.params.answer,
             rsaKey = rsaKey,
             count = 2
@@ -294,23 +311,26 @@ internal class FncyWalletRepositoryImpl(
     override suspend fun requestWalletPasswordChangeWithAnswer(
         request: FncyRequest<ReqSendRestoreAnswer>
     ): Result<Unit> = withContextRun(ioDispatcher) {
+        check(pinValidator.valid(request.params.newPinNumber)) {
+            "Invalid pin number."
+        }
         val rsaKey = apiResultParser.parse(
                 fncyAccountDataSource.requestRsaKey(
                     request.accessToken.toHeader()
                 )
         ).userRsaPubKey
 
-        val encryptAnswer = encryptDataManager.encrypt(
+        val encryptAnswer = fncyEncryptManager.encrypt(
             plainData = request.params.answer.lowercase(),
             rsaKey = rsaKey,
             count = 1
         )
-        val encryptAnswerAlter = encryptDataManager.encrypt(
+        val encryptAnswerAlter = fncyEncryptManager.encrypt(
             plainData = request.params.answer,
             rsaKey = rsaKey,
             count = 1
         )
-        val encryptNewPin = encryptDataManager.encrypt(
+        val encryptNewPin = fncyEncryptManager.encrypt(
             plainData = request.params.newPinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -347,25 +367,29 @@ internal class FncyWalletRepositoryImpl(
     override suspend fun requestWalletAnswerCreation(
         request: FncyRequest<ReqRegisterRestorationKey>
     ): Result<Unit> = withContextRun(ioDispatcher) {
+        check(pinValidator.valid(request.params.pinNumber)) {
+            "Invalid pin number."
+        }
+
         val rsaKey = apiResultParser.parse(
             fncyAccountDataSource.requestRsaKey(
                 request.accessToken.toHeader()
             )
         ).userRsaPubKey
 
-        val encryptQuestion = encryptDataManager.encrypt(
+        val encryptQuestion = fncyEncryptManager.encrypt(
             plainData = request.params.userQuestionSeq.toString(),
             rsaKey = rsaKey,
             count = 1
         )
 
-        val encryptAnswer = encryptDataManager.encrypt(
+        val encryptAnswer = fncyEncryptManager.encrypt(
             plainData = request.params.userAnswer,
             rsaKey = rsaKey,
             count = 1
         )
 
-        val encryptPin = encryptDataManager.encrypt(
+        val encryptPin = fncyEncryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -443,13 +467,17 @@ internal class FncyWalletRepositoryImpl(
     override suspend fun requestMessageSign(
         request: FncyRequest<ReqPostWalletSign>
     ): Result<String> = withContextRun(ioDispatcher) {
+        check(pinValidator.valid(request.params.pinNumber)) {
+            "Invalid pin number."
+        }
+
         val rsaKey = apiResultParser.parse(
             fncyAccountDataSource.requestRsaKey(
                 request.accessToken.toHeader()
             )
         ).userRsaPubKey
 
-        val encryptPin = encryptDataManager.encrypt(
+        val encryptPin = fncyEncryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 1

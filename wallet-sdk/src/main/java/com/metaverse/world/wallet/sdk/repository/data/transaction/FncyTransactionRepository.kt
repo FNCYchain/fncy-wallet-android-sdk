@@ -1,6 +1,6 @@
 package com.metaverse.world.wallet.sdk.repository.data.transaction
 
-import com.metaverse.world.wallet.sdk.crypto.EncryptDataManager
+import com.metaverse.world.wallet.sdk.crypto.FncyEncryptManager
 import com.metaverse.world.wallet.sdk.model.error.FncyException
 import com.metaverse.world.wallet.sdk.model.request.FncyRequest
 import com.metaverse.world.wallet.sdk.model.request.internal.ReqSendTransaction
@@ -12,6 +12,7 @@ import com.metaverse.world.wallet.sdk.model.transaction.FncyTransactionTicket
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTxId
 import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountDataSource
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
+import com.metaverse.world.wallet.sdk.utils.PinValidator
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
 import kotlinx.coroutines.CoroutineDispatcher
@@ -41,7 +42,8 @@ internal class FncyTransactionRepositoryImpl(
     private val fncyTransactionDataSource: FncyTransactionDataSource,
     private val fncyAccountDataSource: FncyAccountDataSource,
     private val apiResultParser: ApiResultParser,
-    private val encryptDataManager: EncryptDataManager,
+    private val fncyEncryptManager: FncyEncryptManager,
+    private val pinValidator: PinValidator,
     private val ioDispatcher: CoroutineDispatcher,
 ) : FncyTransactionRepository {
 
@@ -80,13 +82,16 @@ internal class FncyTransactionRepositoryImpl(
     override suspend fun requestTransactionTicketSend(
         request: FncyRequest<ReqSendTransaction>
     ): Result<FncyTxId> = withContextRun(ioDispatcher) {
+        check(pinValidator.valid(request.params.pinNumber)) {
+            "Invalid pin number."
+        }
         val rsaKey = apiResultParser.parse(
             fncyAccountDataSource.requestRsaKey(
                 request.accessToken.toHeader()
             )
         ).userRsaPubKey
 
-        val encryptData = encryptDataManager.encrypt(
+        val encryptData = fncyEncryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 1

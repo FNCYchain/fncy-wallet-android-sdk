@@ -2,8 +2,7 @@ package com.metaverse.world.wallet.sdk.crypto
 
 import com.google.android.gms.common.util.Hex
 
-
-internal class EncryptDataManager(
+internal class FncyEncryptManager(
     private val fncyCryptoManager: FncyCryptoManager
 ) {
     private fun encryptDataWithRsa(plainData: String, rsaKey: String)=

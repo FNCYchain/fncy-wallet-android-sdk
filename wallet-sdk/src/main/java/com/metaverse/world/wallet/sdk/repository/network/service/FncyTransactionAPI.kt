@@ -2,8 +2,8 @@ package com.metaverse.world.wallet.sdk.repository.network.service
 
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransaction
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransactionTicketSend
-import com.metaverse.world.wallet.sdk.model.transaction.FncyTransactionResult
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTicket
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTransactionResult
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType2
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType4
