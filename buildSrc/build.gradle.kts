@@ -7,4 +7,5 @@ repositories {
     google()
     mavenCentral()
     gradlePluginPortal()
+    mavenLocal()
 }

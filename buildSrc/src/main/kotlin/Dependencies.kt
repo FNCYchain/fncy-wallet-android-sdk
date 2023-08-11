@@ -20,6 +20,8 @@ inline val PluginDependenciesSpec.kotlinSerialization: PluginDependencySpec
     get() = kotlin("plugin.serialization")
 inline val PluginDependenciesSpec.dokka: PluginDependencySpec
     get() = id("org.jetbrains.dokka") version dokkaVersion
+inline val PluginDependenciesSpec.nexusPublish: PluginDependencySpec
+    get() = id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 
 object Dependencies {
     const val coreKtx = "androidx.core:core-ktx:$coreKtxVersion"

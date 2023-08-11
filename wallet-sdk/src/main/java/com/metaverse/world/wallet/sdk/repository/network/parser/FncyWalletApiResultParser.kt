@@ -7,7 +7,6 @@ import com.metaverse.world.wallet.sdk.repository.network.response.FncyResponse
 internal class FncyWalletApiResultParser: ApiResultParser {
 
     override fun <T> parse(response: FncyResponse<T>): T {
-        val code = 100
         return response.run {
             if (code in 200 until 300) {
                 data ?: throw FncyError.Null.exception

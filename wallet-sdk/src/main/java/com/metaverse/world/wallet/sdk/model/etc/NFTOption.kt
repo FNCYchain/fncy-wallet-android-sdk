@@ -1,7 +1,7 @@
 package com.metaverse.world.wallet.sdk.model.etc
 
 enum class NFTOption(val value: String) {
-    ALL("all"),
+    All("all"),
     InStock("instock"),
     ForSale("forsale"),
 }

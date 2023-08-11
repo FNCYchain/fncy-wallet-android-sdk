@@ -4,6 +4,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        mavenLocal()
     }
 }
 rootProject.name = "fncy-wallet-android-sdk"

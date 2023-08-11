@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data class SmartGasPrice(
+data class FncyGasPrice(
     @Serializable(with = BigDecimalSerializer::class)
     val fastGasPrice: BigDecimal = BigDecimal.ZERO,
     @Serializable(with = BigDecimalSerializer::class)

@@ -3,18 +3,19 @@ package com.metaverse.world.wallet.sdk.repository.data.asset
 import com.metaverse.world.wallet.sdk.model.asset.FncyAsset
 import com.metaverse.world.wallet.sdk.model.asset.FncyCurrency
 import com.metaverse.world.wallet.sdk.model.asset.FncyAssetInfo
+import com.metaverse.world.wallet.sdk.model.asset.FncyChainInfo
 import com.metaverse.world.wallet.sdk.model.nft.FncyNFT
 import com.metaverse.world.wallet.sdk.model.request.FncyRequest
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetByAssetId
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetList
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetsByCategory
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainAsset
+import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainInfo
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainAssetByContractAddress
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByNftId
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByOption
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.asByCategory
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
-import com.metaverse.world.wallet.sdk.repository.network.response.ResponseWithPaging
+import com.metaverse.world.wallet.sdk.repository.network.response.PagingData
 import com.metaverse.world.wallet.sdk.repository.network.response.toPagingResponse
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
@@ -24,11 +25,11 @@ internal interface FncyAssetRepository {
 
     suspend fun requestAssetsByCategory(
         request: FncyRequest<ReqAssetsByCategory>
-    ): Result<ResponseWithPaging<List<FncyAsset>?>>
+    ): Result<PagingData<List<FncyAsset>?>>
 
     suspend fun requestAssetList(
         request: FncyRequest<ReqAssetList>
-    ): Result<ResponseWithPaging<List<FncyAsset>?>>
+    ): Result<PagingData<List<FncyAsset>?>>
 
     suspend fun requestAssetByAssetId(
         request: FncyRequest<ReqAssetByAssetId>
@@ -40,15 +41,15 @@ internal interface FncyAssetRepository {
 
     suspend fun requestNftsByOption(
         request: FncyRequest<ReqNftAssetByOption>
-    ): Result<ResponseWithPaging<List<FncyNFT>?>>
+    ): Result<PagingData<List<FncyNFT>?>>
 
     suspend fun requestNftAssetByNftId(
         request: FncyRequest<ReqNftAssetByNftId>
     ): Result<FncyNFT?>
 
-    suspend fun requestBlockchainPlatformAssetId(
-        request: FncyRequest<ReqBlockchainAsset>
-    ): Result<Long>
+    suspend fun requestBlockchainPlatform(
+        request: FncyRequest<ReqBlockchainInfo>
+    ): Result<FncyChainInfo?>
 
     suspend fun requestBlockchainPlatformAssetList(
         request: FncyRequest<ReqBlockchainAssetByContractAddress>
@@ -63,7 +64,7 @@ internal class FncyAssetRepositoryImpl(
 
     override suspend fun requestAssetsByCategory(
         request: FncyRequest<ReqAssetsByCategory>
-    ): Result<ResponseWithPaging<List<FncyAsset>?>> = withContextRun(ioDispatcher) {
+    ): Result<PagingData<List<FncyAsset>?>> = withContextRun(ioDispatcher) {
         val result = apiResultParser.parse(
             fncyAssetDataSource.requestAssetsByCategory(
                 request.accessToken.toHeader(),
@@ -76,7 +77,7 @@ internal class FncyAssetRepositoryImpl(
 
     override suspend fun requestAssetList(
         request: FncyRequest<ReqAssetList>
-    ): Result<ResponseWithPaging<List<FncyAsset>?>> =
+    ): Result<PagingData<List<FncyAsset>?>> =
         withContextRun(ioDispatcher) {
             val result = apiResultParser.parse(
                 if (request.params.fncyAssetCategory != null) {
@@ -124,7 +125,7 @@ internal class FncyAssetRepositoryImpl(
 
     override suspend fun requestNftsByOption(
         request: FncyRequest<ReqNftAssetByOption>
-    ): Result<ResponseWithPaging<List<FncyNFT>?>> =
+    ): Result<PagingData<List<FncyNFT>?>> =
         withContextRun(ioDispatcher) {
             val result = apiResultParser.parse(
                 fncyAssetDataSource.requestNftsByOption(
@@ -149,9 +150,9 @@ internal class FncyAssetRepositoryImpl(
         result.items?.first()
     }
 
-    override suspend fun requestBlockchainPlatformAssetId(
-        request: FncyRequest<ReqBlockchainAsset>
-    ): Result<Long> =
+    override suspend fun requestBlockchainPlatform(
+        request: FncyRequest<ReqBlockchainInfo>
+    ): Result<FncyChainInfo?> =
         withContextRun(ioDispatcher) {
             val result = apiResultParser.parse(
                 fncyAssetDataSource.requestBlockchainPlatformAsset(
@@ -160,7 +161,7 @@ internal class FncyAssetRepositoryImpl(
                 )
             )
 
-            result.items?.first()?.fncyNativeCoinInfo?.nativeCoinId
+            result.items?.first()
                 ?: throw IllegalStateException("Asset Id Not Found")
         }
 

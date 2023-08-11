@@ -7,8 +7,4 @@ import kotlinx.coroutines.launch
 
 class FncyViewModel() : ViewModel() {
 
-    fun getWallet() {
-
-    }
-
 }

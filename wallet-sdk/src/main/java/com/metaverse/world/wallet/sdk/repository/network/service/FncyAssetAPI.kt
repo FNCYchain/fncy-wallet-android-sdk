@@ -1,6 +1,6 @@
 package com.metaverse.world.wallet.sdk.repository.network.service
 
-import com.metaverse.world.wallet.sdk.model.asset.FncyBlockchainInfo
+import com.metaverse.world.wallet.sdk.model.asset.FncyChainInfo
 import com.metaverse.world.wallet.sdk.model.nft.FncyNFT
 import com.metaverse.world.wallet.sdk.model.asset.FncyCurrency
 import com.metaverse.world.wallet.sdk.model.asset.FncyAssetInfo
@@ -60,7 +60,7 @@ internal interface FncyAssetAPI {
     suspend fun requestBlockchainPlatformAsset(
         @HeaderMap header: Map<String, String>,
         @Path("chainId") chainId: Long
-    ): FncyWalletResponse<List<FncyBlockchainInfo>>
+    ): FncyWalletResponse<List<FncyChainInfo>>
 
     @GET("/v1/block-chains/{chainId}/assets/contractAddress/{contractAddress}")
     suspend fun requestBlockchainPlatformAssetList(

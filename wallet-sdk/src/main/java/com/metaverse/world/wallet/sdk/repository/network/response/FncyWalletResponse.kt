@@ -67,7 +67,7 @@ internal fun <T> Data<T>.successData(): T = items ?: run {
     throw FncyError.Null.exception
 }
 
-internal fun <T> Data<T>.toPagingResponse(): ResponseWithPaging<T?> = ResponseWithPaging(
+internal fun <T> Data<T>.toPagingResponse(): PagingData<T?> = PagingData(
     items,
     requireNotNull(paging)
 )

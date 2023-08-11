@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data class FncyPrices(
+data class FncyPrice(
     val displayKrwPrice: String? = null,
     val displayUsdPrice: String? = null,
     val displayBtcPrice: String? = null,

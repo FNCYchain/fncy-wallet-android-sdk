@@ -29,6 +29,11 @@ internal value class ReqCheckResetAnswer(
     val answer: String,
 )
 
+internal data class ReqSendRestoreAnswer(
+    val answer: String,
+    val newPinNumber: String,
+)
+
 internal data class ReqPostWalletSign(
     val wid: Long,
     val dataToSign: String,

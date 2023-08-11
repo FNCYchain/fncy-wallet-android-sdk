@@ -9,6 +9,7 @@ import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTrans
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransactionTicketSend
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTicket
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTransactionTicket
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTxId
 import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountDataSource
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
 import com.metaverse.world.wallet.sdk.utils.toHeader
@@ -27,7 +28,7 @@ internal interface FncyTransactionRepository {
 
     suspend fun requestTransactionTicketSend(
         request: FncyRequest<ReqSendTransaction>
-    ): Result<String>
+    ): Result<FncyTxId>
 
     // 예상 전송 트랜젝션 정보 요청
     suspend fun requestTransactionEstimateInfo(
@@ -78,7 +79,7 @@ internal class FncyTransactionRepositoryImpl(
 
     override suspend fun requestTransactionTicketSend(
         request: FncyRequest<ReqSendTransaction>
-    ): Result<String> = withContextRun(ioDispatcher) {
+    ): Result<FncyTxId> = withContextRun(ioDispatcher) {
         val rsaKey = apiResultParser.parse(
             fncyAccountDataSource.requestRsaKey(
                 request.accessToken.toHeader()
@@ -101,7 +102,7 @@ internal class FncyTransactionRepositoryImpl(
             )
         )
 
-        result.txId ?: throw IllegalStateException("TxHash is Null")
+        FncyTxId(result.txId ?: throw IllegalStateException("TxHash is Null"))
 
     }
 

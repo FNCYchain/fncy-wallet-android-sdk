@@ -1,6 +1,6 @@
 package com.metaverse.world.wallet.sdk.repository.network.response
 
-data class ResponseWithPaging<T>(
-    val response: T,
+data class PagingData<T>(
+    val data: T,
     val paging: Paging
 )

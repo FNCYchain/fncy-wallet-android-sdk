@@ -10,5 +10,5 @@ data class FncyNFT(
     var lockedYn: String? = null
     var nftOrd: Long = 0
     var displayYn: String? = null
-    var fncyNftInfo: FncyNFTInfo? = null
+    var nftInfo: FncyNFTInfo? = null
 }

@@ -45,7 +45,7 @@ internal data class ReqNftAssetByNftId(
     val nftId: Long
 )
 
-internal data class ReqBlockchainAsset(val chainId: Long)
+internal data class ReqBlockchainInfo(val chainId: Long)
 
 internal data class ReqBlockchainAssetByContractAddress(
     val chainId: Long,

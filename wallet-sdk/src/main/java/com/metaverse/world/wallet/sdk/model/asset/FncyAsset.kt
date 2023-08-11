@@ -15,8 +15,8 @@ data class FncyAsset(
     var balance: BigDecimal? = null
     var balancePlainString: String? = null
     var displayBalance: String? = null
-    var fncyPrices: FncyPrices? = null
-    var fncyAssetInfo: FncyAssetInfo? = null
+    var price: FncyPrice? = null
+    var assetInfo: FncyAssetInfo? = null
     var gameCode: String? = null
     var gameNm: String? = null
     var marketId: String? = null

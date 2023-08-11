@@ -1,7 +1,7 @@
 package com.metaverse.world.wallet.sdk.model.asset
 
 @kotlinx.serialization.Serializable
-class FncyBlockchainInfo (
+class FncyChainInfo (
     val chainId: Long = 0,
     val createKst: Long = 0,
     val updateKst: Long = 0,
@@ -11,6 +11,6 @@ class FncyBlockchainInfo (
     val testnetYn: String? = null,
     val chainActiveYn: String? = null,
     val chainDesc: String? = null,
-    val fncyNativeCoinInfo: FncyNativeCoinInfo? = null,
-    val fncyMajorAssetInfo: FncyMajorAssetInfo? = null
+    val nativeCoinInfo: FncyNativeCoinInfo? = null,
+    val majorAssetInfo: FncyMajorAssetInfo? = null
 )

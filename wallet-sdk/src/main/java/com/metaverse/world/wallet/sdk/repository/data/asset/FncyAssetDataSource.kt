@@ -3,13 +3,13 @@ package com.metaverse.world.wallet.sdk.repository.data.asset
 import com.metaverse.world.wallet.sdk.model.asset.FncyAsset
 import com.metaverse.world.wallet.sdk.model.asset.FncyCurrency
 import com.metaverse.world.wallet.sdk.model.asset.FncyAssetInfo
-import com.metaverse.world.wallet.sdk.model.asset.FncyBlockchainInfo
+import com.metaverse.world.wallet.sdk.model.asset.FncyChainInfo
 import com.metaverse.world.wallet.sdk.model.nft.FncyNFT
 import com.metaverse.world.wallet.sdk.model.etc.NFTOption
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetByAssetId
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetList
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetsByCategory
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainAsset
+import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainInfo
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainAssetByContractAddress
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByNftId
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByOption
@@ -56,8 +56,8 @@ internal interface FncyAssetDataSource {
 
     suspend fun requestBlockchainPlatformAsset(
         header: Map<String, String>,
-        reqBlockchainAsset: ReqBlockchainAsset
-    ): FncyWalletResponse<List<FncyBlockchainInfo>>
+        reqBlockchainInfo: ReqBlockchainInfo
+    ): FncyWalletResponse<List<FncyChainInfo>>
 
     suspend fun requestBlockchainPlatformAssetList(
         header: Map<String, String>,
@@ -146,12 +146,12 @@ internal class FncyAssetDataSourceImpl(
 
     override suspend fun requestBlockchainPlatformAsset(
         header: Map<String, String>,
-        reqBlockchainAsset: ReqBlockchainAsset
-    ): FncyWalletResponse<List<FncyBlockchainInfo>> {
+        reqBlockchainInfo: ReqBlockchainInfo
+    ): FncyWalletResponse<List<FncyChainInfo>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestBlockchainPlatformAsset(
             header,
-            reqBlockchainAsset.chainId
+            reqBlockchainInfo.chainId
         )
     }
 

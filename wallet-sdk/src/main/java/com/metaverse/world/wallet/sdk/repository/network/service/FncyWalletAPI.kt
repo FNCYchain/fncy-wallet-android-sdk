@@ -7,10 +7,10 @@ import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPassw
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordValidation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletAnswerCreation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletCreation
-import com.metaverse.world.wallet.sdk.model.transaction.TransferHistory
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
 import com.metaverse.world.wallet.sdk.model.wallet.FncyMessageSign
 import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
-import com.metaverse.world.wallet.sdk.model.wallet.SmartGasPrice
+import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
 import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
 import com.metaverse.world.wallet.sdk.model.wallet.FncyWallet
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
@@ -94,14 +94,14 @@ internal interface FncyWalletAPI {
     suspend fun requestSmartGasPrice(
         @HeaderMap header: Map<String, String>,
         @Path("chainId") chainId: Long
-    ): FncyWalletResponse<List<SmartGasPrice>>
+    ): FncyWalletResponse<List<FncyGasPrice>>
 
     @GET("/v1/wallets/{wid}/assets/transfers/recent")
     suspend fun requestRecentTransferHistoryList(
         @HeaderMap header: Map<String, String>,
         @Path("wid") wid: Long,
         @QueryMap paging: Map<String, String>
-    ): FncyWalletResponse<List<TransferHistory>>
+    ): FncyWalletResponse<List<FncyTransaction>>
 
     @GET("/v1/wallets/{wid}/assets/transfers")
     suspend fun requestTransferHistoryList(
@@ -109,14 +109,14 @@ internal interface FncyWalletAPI {
         @Path("wid") wid: Long,
         @QueryMap param: Map<String, String>,
         @QueryMap paging: Map<String, String>
-    ): FncyWalletResponse<List<TransferHistory>>
+    ): FncyWalletResponse<List<FncyTransaction>>
 
     @GET("/v2/wallets/{wid}/assets/transfers/{historySeq}")
     suspend fun requestTransferDetailBySeq(
         @HeaderMap headerMap: Map<String, String>,
         @Path("wid") wid: Long,
         @Path("historySeq") transferSeq: Long,
-    ): FncyWalletResponse<List<TransferHistory>>
+    ): FncyWalletResponse<List<FncyTransaction>>
 
     @POST("v1/wallets/{wid}/signature")
     suspend fun requestMessageSign(
@@ -124,6 +124,5 @@ internal interface FncyWalletAPI {
         @Path("wid") wid: Long,
         @Body params: ReqMessageSign
     ): FncyWalletResponseType2<FncyMessageSign>
-
 
 }

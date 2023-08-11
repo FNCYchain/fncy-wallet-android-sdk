@@ -3,7 +3,7 @@ package com.metaverse.world.wallet.sdk.model.transaction
 import com.metaverse.world.wallet.sdk.model.asset.FncyAssetInfo
 
 @kotlinx.serialization.Serializable
-data class TransferHistory(
+data class FncyTransaction(
     val historySeq: Long,
     val transferSeq: Long,
     val wid: Long,
@@ -11,7 +11,7 @@ data class TransferHistory(
 ) {
     var chainId: Long? = null
     var fid: Long? = null
-    var fncyAssetInfo: FncyAssetInfo? = null
+    var assetInfo: FncyAssetInfo? = null
     var transferEventDcd: String? = null
     var transferEvent: String? = null
     var transferMethod: String? = null

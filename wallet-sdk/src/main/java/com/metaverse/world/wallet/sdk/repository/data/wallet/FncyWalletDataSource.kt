@@ -10,10 +10,10 @@ import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTrans
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransferHistory
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletAnswerCreation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletCreation
-import com.metaverse.world.wallet.sdk.model.transaction.TransferHistory
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
 import com.metaverse.world.wallet.sdk.model.wallet.FncyMessageSign
 import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
-import com.metaverse.world.wallet.sdk.model.wallet.SmartGasPrice
+import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
 import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
 import com.metaverse.world.wallet.sdk.model.wallet.FncyWallet
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
@@ -93,24 +93,24 @@ internal interface FncyWalletDataSource {
     suspend fun requestSmartGasPrice(
         header: HashMap<String, String>,
         blockchainId: Long
-    ): FncyWalletResponse<List<SmartGasPrice>>
+    ): FncyWalletResponse<List<FncyGasPrice>>
 
     // 자산 전송 히스토리 목록
     suspend fun requestTransferHistoryList(
         header: Map<String, String>,
         reqTransferHistory: ReqTransferHistory
-    ): FncyWalletResponse<List<TransferHistory>>
+    ): FncyWalletResponse<List<FncyTransaction>>
 
     // 최근 트랜잭션 히스토리 요청
     suspend fun requestRecentTransferHistoryList(
         header: HashMap<String, String>,
         reqRecentTransactionHistory: ReqRecentTransactionHistory
-    ): FncyWalletResponse<List<TransferHistory>>
+    ): FncyWalletResponse<List<FncyTransaction>>
 
     suspend fun requestTransferDetailBySeq(
         header: Map<String, String>,
         reqTransferDetail: ReqTransferDetail
-    ): FncyWalletResponse<List<TransferHistory>>
+    ): FncyWalletResponse<List<FncyTransaction>>
 
     suspend fun requestMessageSign(
         header: HashMap<String, String>,
@@ -234,7 +234,7 @@ internal class FncyWalletDataSourceImpl(
     override suspend fun requestSmartGasPrice(
         header: HashMap<String, String>,
         blockchainId: Long
-    ): FncyWalletResponse<List<SmartGasPrice>> {
+    ): FncyWalletResponse<List<FncyGasPrice>> {
         val fncyWallet = retrofit.create(FncyWalletAPI::class.java)
         return fncyWallet.requestSmartGasPrice(
             header,
@@ -246,7 +246,7 @@ internal class FncyWalletDataSourceImpl(
     override suspend fun requestRecentTransferHistoryList(
         header: HashMap<String, String>,
         reqRecentTransactionHistory: ReqRecentTransactionHistory
-    ): FncyWalletResponse<List<TransferHistory>> {
+    ): FncyWalletResponse<List<FncyTransaction>> {
         val fncyWallet = retrofit.create(FncyWalletAPI::class.java)
         return fncyWallet.requestRecentTransferHistoryList(
             header,
@@ -258,7 +258,7 @@ internal class FncyWalletDataSourceImpl(
     override suspend fun requestTransferHistoryList(
         header: Map<String, String>,
         reqTransferHistory: ReqTransferHistory
-    ): FncyWalletResponse<List<TransferHistory>> {
+    ): FncyWalletResponse<List<FncyTransaction>> {
         val fncyTransaction = retrofit.create(FncyWalletAPI::class.java)
         return fncyTransaction.requestTransferHistoryList(
             header,
@@ -271,7 +271,7 @@ internal class FncyWalletDataSourceImpl(
     override suspend fun requestTransferDetailBySeq(
         header: Map<String, String>,
         reqTransferDetail: ReqTransferDetail
-    ): FncyWalletResponse<List<TransferHistory>> {
+    ): FncyWalletResponse<List<FncyTransaction>> {
         val fncyTransaction = retrofit.create(FncyWalletAPI::class.java)
         return fncyTransaction.requestTransferDetailBySeq(
             header,

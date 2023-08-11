@@ -8,6 +8,7 @@ import com.metaverse.world.wallet.sdk.model.request.internal.ReqMakeWallet
 import com.metaverse.world.wallet.sdk.model.request.internal.ReqPostWalletSign
 import com.metaverse.world.wallet.sdk.model.request.internal.ReqRegisterRestorationKey
 import com.metaverse.world.wallet.sdk.model.request.internal.ReqResetWalletPin
+import com.metaverse.world.wallet.sdk.model.request.internal.ReqSendRestoreAnswer
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAnswerValidation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqMessageSign
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordChange
@@ -20,15 +21,15 @@ import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTrans
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletAnswerCreation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletCreation
 import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletId
-import com.metaverse.world.wallet.sdk.model.transaction.TransferHistory
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
 import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
-import com.metaverse.world.wallet.sdk.model.wallet.SmartGasPrice
+import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
 import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
 import com.metaverse.world.wallet.sdk.model.wallet.FncyWallet
 import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountDataSource
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
 import com.metaverse.world.wallet.sdk.repository.network.response.Paging
-import com.metaverse.world.wallet.sdk.repository.network.response.ResponseWithPaging
+import com.metaverse.world.wallet.sdk.repository.network.response.PagingData
 import com.metaverse.world.wallet.sdk.repository.network.response.toParamMap
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
@@ -80,13 +81,13 @@ internal interface FncyWalletRepository {
 
     // 지갑 질문 답변 패스워드 변경
     suspend fun requestWalletPasswordChangeWithAnswer(
-        request: FncyRequest<ReqPasswordChangeWithAnswer>
+        request: FncyRequest<ReqSendRestoreAnswer>
     ): Result<Unit>
 
     // 복원키 질문 리스트 요청
     suspend fun requestWalletQuestions(
         request: FncyRequest<Paging>
-    ): Result<ResponseWithPaging<List<FncyQuestion>>>
+    ): Result<PagingData<List<FncyQuestion>>>
 
     // 복원키 생성
     suspend fun requestWalletAnswerCreation(
@@ -96,19 +97,19 @@ internal interface FncyWalletRepository {
     // 가스 수수료 요청
     suspend fun requestSmartGasPrice(
         request: FncyRequest<ReqSmartGasPrice>
-    ): Result<SmartGasPrice>
+    ): Result<FncyGasPrice>
 
     suspend fun requestRecentTransferHistoryList(
         request: FncyRequest<ReqRecentTransactionHistory>
-    ): Result<List<TransferHistory>?>
+    ): Result<List<FncyTransaction>?>
 
     suspend fun requestTransferHistoryList(
         request: FncyRequest<ReqTransferHistory>
-    ): Result<ResponseWithPaging<List<TransferHistory>?>>
+    ): Result<PagingData<List<FncyTransaction>?>>
 
     suspend fun requestTransferDetailBySeq(
         request: FncyRequest<ReqTransferDetail>
-    ): Result<TransferHistory?>
+    ): Result<FncyTransaction?>
 
     suspend fun requestMessageSign(
         request: FncyRequest<ReqPostWalletSign>
@@ -291,19 +292,44 @@ internal class FncyWalletRepositoryImpl(
     }
 
     override suspend fun requestWalletPasswordChangeWithAnswer(
-        request: FncyRequest<ReqPasswordChangeWithAnswer>
+        request: FncyRequest<ReqSendRestoreAnswer>
     ): Result<Unit> = withContextRun(ioDispatcher) {
+        val rsaKey = apiResultParser.parse(
+                fncyAccountDataSource.requestRsaKey(
+                    request.accessToken.toHeader()
+                )
+        ).userRsaPubKey
+
+        val encryptAnswer = encryptDataManager.encrypt(
+            plainData = request.params.answer.lowercase(),
+            rsaKey = rsaKey,
+            count = 1
+        )
+        val encryptAnswerAlter = encryptDataManager.encrypt(
+            plainData = request.params.answer,
+            rsaKey = rsaKey,
+            count = 1
+        )
+        val encryptNewPin = encryptDataManager.encrypt(
+            plainData = request.params.newPinNumber,
+            rsaKey = rsaKey,
+            count = 1
+        )
         apiResultParser.parse(
             fncyWalletDataSource.requestWalletPasswordChangeWithAnswer(
                 request.accessToken.toHeader(),
-                request.params
+                ReqPasswordChangeWithAnswer(
+                    rsaEncryptUserAnswer = encryptAnswer,
+                    rsaEncryptUserAnswerAlter = encryptAnswerAlter,
+                    rsaEncryptChangeUserPin = encryptNewPin
+                )
             )
         )
     }
 
     override suspend fun requestWalletQuestions(
         request: FncyRequest<Paging>
-    ): Result<ResponseWithPaging<List<FncyQuestion>>> = withContextRun(ioDispatcher) {
+    ): Result<PagingData<List<FncyQuestion>>> = withContextRun(ioDispatcher) {
         val result = apiResultParser.parse(
             fncyWalletDataSource.requestWalletQuestions(
                 request.accessToken.toHeader(),
@@ -311,7 +337,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        ResponseWithPaging(
+        PagingData(
             result.items
                 ?: throw IllegalStateException("Question is null"),
             requireNotNull(result.paging)
@@ -360,7 +386,7 @@ internal class FncyWalletRepositoryImpl(
 
     override suspend fun requestSmartGasPrice(
         request: FncyRequest<ReqSmartGasPrice>
-    ): Result<SmartGasPrice> = withContextRun(ioDispatcher) {
+    ): Result<FncyGasPrice> = withContextRun(ioDispatcher) {
         val result = apiResultParser.parse(
             fncyWalletDataSource.requestSmartGasPrice(
                 request.accessToken.toHeader(),
@@ -374,7 +400,7 @@ internal class FncyWalletRepositoryImpl(
 
     override suspend fun requestRecentTransferHistoryList(
         request: FncyRequest<ReqRecentTransactionHistory>
-    ): Result<List<TransferHistory>?> = withContextRun(ioDispatcher) {
+    ): Result<List<FncyTransaction>?> = withContextRun(ioDispatcher) {
         val result = apiResultParser.parse(
             fncyWalletDataSource.requestRecentTransferHistoryList(
                 request.accessToken.toHeader(),
@@ -387,7 +413,7 @@ internal class FncyWalletRepositoryImpl(
 
     override suspend fun requestTransferHistoryList(
         request: FncyRequest<ReqTransferHistory>
-    ): Result<ResponseWithPaging<List<TransferHistory>?>> = withContextRun(ioDispatcher) {
+    ): Result<PagingData<List<FncyTransaction>?>> = withContextRun(ioDispatcher) {
         val result = apiResultParser.parse(
             fncyWalletDataSource.requestTransferHistoryList(
                 request.accessToken.toHeader(),
@@ -395,7 +421,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        ResponseWithPaging(
+        PagingData(
             result.items,
             requireNotNull(result.paging)
         )
@@ -403,7 +429,7 @@ internal class FncyWalletRepositoryImpl(
 
     override suspend fun requestTransferDetailBySeq(
         request: FncyRequest<ReqTransferDetail>
-    ): Result<TransferHistory?> = withContextRun(ioDispatcher) {
+    ): Result<FncyTransaction?> = withContextRun(ioDispatcher) {
         val result = apiResultParser.parse(
             fncyWalletDataSource.requestTransferDetailBySeq(
                 request.accessToken.toHeader(),

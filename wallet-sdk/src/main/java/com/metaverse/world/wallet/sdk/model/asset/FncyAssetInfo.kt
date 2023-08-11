@@ -10,12 +10,12 @@ data class FncyAssetInfo(
     var assetNm: String? = null
     var assetSymbol: String? = null
     var assetSymbolImg: String? = null
-    var assetDecimal = 0
+    var assetDecimal: Long = 0
     var gcoinYn: String? = null
     var assetDesc: String? = null
     var cubeYn: String? = null
     var defaultAssetYn: String? = null
-    var chainId = 0
+    var chainId: Long = 0
     var chainNm: String? = null
     var assetButtonTypeDcd: String? = null
     var assetButtonType: String? = null
