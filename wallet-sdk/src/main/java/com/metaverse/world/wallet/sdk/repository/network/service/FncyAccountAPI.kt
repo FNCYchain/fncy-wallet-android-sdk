@@ -15,7 +15,7 @@ internal interface FncyAccountAPI {
     ): FncyWalletResponse<Unit>
 
     @GET("v1/users/rsa-public")
-    suspend fun requestRasKey(
+    suspend fun requestRsaKey(
         @HeaderMap header: Map<String, String>
     ): FncyWalletResponseType2<KmsRsaPubKey>
 

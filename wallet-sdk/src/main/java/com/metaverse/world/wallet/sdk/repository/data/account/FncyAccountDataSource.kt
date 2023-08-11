@@ -42,7 +42,7 @@ internal class FncyAccountDataSourceImpl(
         authorizationTokenHeader: HashMap<String, String>
     ): FncyWalletResponseType2<KmsRsaPubKey> {
         val fncyAccountAPI = retrofit.create(FncyAccountAPI::class.java)
-        return fncyAccountAPI.requestRasKey(authorizationTokenHeader)
+        return fncyAccountAPI.requestRsaKey(authorizationTokenHeader)
     }
 
     override suspend fun requestRemoveDeviceToken(
