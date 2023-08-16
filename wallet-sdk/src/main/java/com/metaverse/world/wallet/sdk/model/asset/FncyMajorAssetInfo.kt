@@ -4,4 +4,5 @@ data class FncyMajorAssetInfo(
     val majorAssetId: Long = 0,
     val majorAssetSymbol: String? = null,
     val majorAssetSymbolImg: String? = null,
+    val contractAddress: String? = null,
 )

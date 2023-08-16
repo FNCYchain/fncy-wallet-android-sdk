@@ -12,11 +12,13 @@ internal data class MajorAssetInfoResponse(
     val totalUsdPrice: String? = null,
     val displayTotalUsdPrice: String? = null,
     val totalKrwPrice: String? = null,
-    val displayTotalKrwPrice: String? = null
+    val displayTotalKrwPrice: String? = null,
+    val contractAddress: String? = null,
 )
 
 internal fun MajorAssetInfoResponse.asDomain() = FncyMajorAssetInfo(
     majorAssetId = majorAssetId,
     majorAssetSymbol = majorAssetSymbol,
     majorAssetSymbolImg = majorAssetSymbolImg,
+    contractAddress = contractAddress,
 )

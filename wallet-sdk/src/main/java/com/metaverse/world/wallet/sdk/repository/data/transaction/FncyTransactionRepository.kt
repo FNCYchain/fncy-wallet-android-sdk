@@ -4,7 +4,7 @@ import com.metaverse.world.wallet.sdk.crypto.FncyEncryptManager
 import com.metaverse.world.wallet.sdk.model.error.FncyException
 import com.metaverse.world.wallet.sdk.model.request.ReqSendTransaction
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTicket
-import com.metaverse.world.wallet.sdk.model.transaction.FncyTransactionTicket
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTicketResult
 import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountDataSource
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
 import com.metaverse.world.wallet.sdk.repository.network.request.FncyRequest
@@ -25,7 +25,7 @@ internal interface FncyTransactionRepository {
 
     suspend fun requestTransactionTicket(
         request: FncyRequest<ReqTransaction>
-    ): Result<FncyTransactionTicket>
+    ): Result<FncyTicketResult>
 
     suspend fun requestTransactionTicketSend(
         request: FncyRequest<ReqSendTransaction>
@@ -63,7 +63,7 @@ internal class FncyTransactionRepositoryImpl(
 
     override suspend fun requestTransactionTicket(
         request: FncyRequest<ReqTransaction>
-    ): Result<FncyTransactionTicket> = withContextRun(ioDispatcher) {
+    ): Result<FncyTicketResult> = withContextRun(ioDispatcher) {
         val result = apiResultParser.parse(
             fncyTransactionDataSource.requestTransactionTicket(
                 request.accessToken.toHeader(),
@@ -71,7 +71,7 @@ internal class FncyTransactionRepositoryImpl(
             )
         )
 
-        FncyTransactionTicket(
+        FncyTicketResult(
             result.ticketUuid
                 ?: throw IllegalStateException("Ticket is Null"),
             result.ticketHash ?: ""

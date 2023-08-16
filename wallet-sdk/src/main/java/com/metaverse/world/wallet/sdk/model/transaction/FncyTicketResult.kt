@@ -1,6 +1,6 @@
 package com.metaverse.world.wallet.sdk.model.transaction
 
-data class FncyTransactionTicket(
+data class FncyTicketResult(
     val ticketUuid: String,
     val ticketHash: String
 )
