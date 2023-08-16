@@ -1,7 +1,5 @@
 package com.metaverse.world.wallet.sdk.model.nft
 
-
-@kotlinx.serialization.Serializable
 data class FncyNFTMetaInfo(
     var gameName: String? = null
 ) {

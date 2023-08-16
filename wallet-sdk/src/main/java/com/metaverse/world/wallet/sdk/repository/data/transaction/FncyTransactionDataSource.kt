@@ -1,14 +1,14 @@
 package com.metaverse.world.wallet.sdk.repository.data.transaction
 
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransaction
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransactionByTicket
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransactionTicketSend
-import com.metaverse.world.wallet.sdk.model.transaction.FncyTicket
-import com.metaverse.world.wallet.sdk.model.transaction.FncyTransactionResult
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransaction
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransactionByTicket
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransactionTicketSend
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType2
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType4
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType5
+import com.metaverse.world.wallet.sdk.repository.network.response.transaction.TicketResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.transaction.TransactionResultResponse
 import com.metaverse.world.wallet.sdk.repository.network.service.FncyTransactionAPI
 import retrofit2.Retrofit
 
@@ -18,7 +18,7 @@ internal interface FncyTransactionDataSource {
     suspend fun requestTransactionByTicketUuId(
         header: HashMap<String, String>,
         reqTransactionByTicket: ReqTransactionByTicket
-    ): FncyWalletResponse<List<FncyTicket>>
+    ): FncyWalletResponse<List<TicketResponse>>
 
     //  트랜잭션 Ticket 생성 요청
     suspend fun requestTransactionTicket(
@@ -29,13 +29,13 @@ internal interface FncyTransactionDataSource {
     suspend fun requestTransactionTicketSend(
         header: HashMap<String, String>,
         reqTransactionTicketSend: ReqTransactionTicketSend
-    ): FncyWalletResponseType2<FncyTransactionResult>
+    ): FncyWalletResponseType2<TransactionResultResponse>
 
     // 트랜잭션 수수료 예측 요청
     suspend fun requestTransactionEstimate(
         header: HashMap<String, String>,
         reqTransaction: ReqTransaction
-    ): FncyWalletResponseType4<List<FncyTicket>>
+    ): FncyWalletResponseType4<List<TicketResponse>>
 
 }
 
@@ -46,7 +46,7 @@ internal class FncyTransactionDataSourceImpl(
     override suspend fun requestTransactionByTicketUuId(
         header: HashMap<String, String>,
         reqTransactionByTicket: ReqTransactionByTicket
-    ): FncyWalletResponse<List<FncyTicket>> {
+    ): FncyWalletResponse<List<TicketResponse>> {
         val fncyTransaction = retrofit.create(FncyTransactionAPI::class.java)
         return fncyTransaction.requestTransactionByTicketUuId(
             header,
@@ -68,7 +68,7 @@ internal class FncyTransactionDataSourceImpl(
     override suspend fun requestTransactionTicketSend(
         header: HashMap<String, String>,
         reqTransactionTicketSend: ReqTransactionTicketSend
-    ): FncyWalletResponseType2<FncyTransactionResult> {
+    ): FncyWalletResponseType2<TransactionResultResponse> {
         val fncyTransaction = retrofit.create(FncyTransactionAPI::class.java)
         return fncyTransaction.requestTransferTicket(
             header,
@@ -80,11 +80,8 @@ internal class FncyTransactionDataSourceImpl(
     override suspend fun requestTransactionEstimate(
         header: HashMap<String, String>,
         reqTransaction: ReqTransaction
-    ): FncyWalletResponseType4<List<FncyTicket>> {
+    ): FncyWalletResponseType4<List<TicketResponse>> {
         val fncyTransaction = retrofit.create(FncyTransactionAPI::class.java)
-        fncyTransaction.requestTransactionEstimate(
-            header,
-            reqTransaction).data
         return fncyTransaction.requestTransactionEstimate(
             header,
             reqTransaction

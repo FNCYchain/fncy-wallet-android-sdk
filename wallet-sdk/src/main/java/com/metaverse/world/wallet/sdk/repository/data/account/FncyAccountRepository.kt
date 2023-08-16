@@ -1,7 +1,7 @@
 package com.metaverse.world.wallet.sdk.repository.data.account
 
-import com.metaverse.world.wallet.sdk.model.request.FncyRequest
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqRemoveDeviceToken
+import com.metaverse.world.wallet.sdk.repository.network.request.FncyRequest
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqRemoveDeviceToken
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
 import com.metaverse.world.wallet.sdk.repository.network.response.isSuccess
 import com.metaverse.world.wallet.sdk.repository.network.response.successData

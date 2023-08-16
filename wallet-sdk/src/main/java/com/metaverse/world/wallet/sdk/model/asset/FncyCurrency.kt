@@ -1,6 +1,5 @@
 package com.metaverse.world.wallet.sdk.model.asset
 
-@kotlinx.serialization.Serializable
 data class FncyCurrency(
     val assetId: Long
 ) {
@@ -29,6 +28,4 @@ data class FncyCurrency(
     var displayDailyVolumeKrw: String? = null
     var hourChange: String? = null
     var dayChange: String? = null
-    var projectLink: String? = null
-    var whitePaperLink: String? = null
 }

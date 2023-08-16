@@ -1,6 +1,5 @@
 package com.metaverse.world.wallet.sdk.model.nft
 
-@kotlinx.serialization.Serializable
 data class FncyNFT(
     val nftId: Long
 ) {

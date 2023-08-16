@@ -1,4 +1,4 @@
-package com.metaverse.world.wallet.sdk.model.request.internal.datasource
+package com.metaverse.world.wallet.sdk.repository.network.request.internal
 
 import com.metaverse.world.wallet.sdk.repository.network.serialization.BigIntegerSerializer
 import java.math.BigInteger

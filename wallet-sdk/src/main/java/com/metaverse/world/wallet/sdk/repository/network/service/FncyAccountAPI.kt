@@ -1,6 +1,6 @@
 package com.metaverse.world.wallet.sdk.repository.network.service
 
-import com.metaverse.world.wallet.sdk.model.account.KmsRsaPubKey
+import com.metaverse.world.wallet.sdk.repository.network.response.account.KmsRsaPubKey
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType2
 import retrofit2.http.GET

@@ -1,26 +1,13 @@
 package com.metaverse.world.wallet.sdk.repository.data.wallet
 
 import com.metaverse.world.wallet.sdk.crypto.FncyEncryptManager
-import com.metaverse.world.wallet.sdk.model.request.FncyRequest
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqCheckResetAnswer
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqCheckWalletPin
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqMakeWallet
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqPostWalletSign
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqRegisterRestorationKey
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqResetWalletPin
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqSendRestoreAnswer
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAnswerValidation
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqMessageSign
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordChange
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordChangeWithAnswer
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordValidation
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqRecentTransactionHistory
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqSmartGasPrice
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransferDetail
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransferHistory
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletAnswerCreation
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletCreation
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletId
+import com.metaverse.world.wallet.sdk.model.request.ReqCheckResetAnswer
+import com.metaverse.world.wallet.sdk.model.request.ReqCheckWalletPin
+import com.metaverse.world.wallet.sdk.model.request.ReqMakeWallet
+import com.metaverse.world.wallet.sdk.model.request.ReqPostWalletSign
+import com.metaverse.world.wallet.sdk.model.request.ReqRegisterRestorationKey
+import com.metaverse.world.wallet.sdk.model.request.ReqResetWalletPin
+import com.metaverse.world.wallet.sdk.model.request.ReqSendRestoreAnswer
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
 import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
 import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
@@ -28,9 +15,24 @@ import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
 import com.metaverse.world.wallet.sdk.model.wallet.FncyWallet
 import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountDataSource
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
+import com.metaverse.world.wallet.sdk.repository.network.request.FncyRequest
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAnswerValidation
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqMessageSign
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqPasswordChange
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqPasswordChangeWithAnswer
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqPasswordValidation
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqRecentTransactionHistory
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqSmartGasPrice
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransferDetail
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransferHistory
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqWalletAnswerCreation
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqWalletCreation
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqWalletId
 import com.metaverse.world.wallet.sdk.repository.network.response.Paging
 import com.metaverse.world.wallet.sdk.repository.network.response.PagingData
 import com.metaverse.world.wallet.sdk.repository.network.response.toParamMap
+import com.metaverse.world.wallet.sdk.repository.network.response.transaction.asDomain
+import com.metaverse.world.wallet.sdk.repository.network.response.wallet.asDomain
 import com.metaverse.world.wallet.sdk.utils.PinValidator
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
@@ -137,7 +139,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        result.items?.getOrNull(0)
+        result.items?.getOrNull(0)?.asDomain()
     }
 
     override suspend fun requestWalletDetail(
@@ -150,7 +152,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        result.items?.getOrNull(0)
+        result.items?.getOrNull(0)?.asDomain()
     }
     override suspend fun requestTotalWalletBalance(
         request: FncyRequest<ReqWalletId>
@@ -162,7 +164,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        requireNotNull(result.items?.first())
+        requireNotNull(result.items?.first()?.asDomain())
     }
     override suspend fun requestPasswordValidation(
         request: FncyRequest<ReqCheckWalletPin>
@@ -272,7 +274,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        result.items?.first()
+        result.items?.first()?.asDomain()
             ?: throw IllegalStateException("Question is null")
     }
 
@@ -358,7 +360,7 @@ internal class FncyWalletRepositoryImpl(
         )
 
         PagingData(
-            result.items
+            result.items?.map { it.asDomain() }
                 ?: throw IllegalStateException("Question is null"),
             requireNotNull(result.paging)
         )
@@ -418,7 +420,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        result.items?.first()
+        result.items?.first()?.asDomain()
             ?: throw IllegalStateException("Gas Price is null")
     }
 
@@ -432,7 +434,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        result.items
+        result.items?.map { it.asDomain() }
     }
 
     override suspend fun requestTransferHistoryList(
@@ -446,7 +448,8 @@ internal class FncyWalletRepositoryImpl(
         )
 
         PagingData(
-            result.items,
+            result.items?.map { it.asDomain() }
+                ?: throw IllegalStateException("Transaction is null"),
             requireNotNull(result.paging)
         )
     }
@@ -461,7 +464,7 @@ internal class FncyWalletRepositoryImpl(
             )
         )
 
-        result.items?.first()
+        result.items?.first()?.asDomain()
     }
 
     override suspend fun requestMessageSign(

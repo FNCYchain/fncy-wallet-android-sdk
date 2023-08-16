@@ -1,4 +1,4 @@
-package com.metaverse.world.wallet.sdk.model.request.internal
+package com.metaverse.world.wallet.sdk.model.request
 
 internal data class ReqMakeWallet(
     val chainId: Int = 1,

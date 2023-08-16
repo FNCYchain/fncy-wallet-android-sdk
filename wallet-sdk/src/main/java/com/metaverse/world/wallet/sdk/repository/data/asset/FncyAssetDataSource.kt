@@ -1,19 +1,19 @@
 package com.metaverse.world.wallet.sdk.repository.data.asset
 
-import com.metaverse.world.wallet.sdk.model.asset.FncyAsset
-import com.metaverse.world.wallet.sdk.model.asset.FncyAssetInfo
-import com.metaverse.world.wallet.sdk.model.asset.FncyChainInfo
-import com.metaverse.world.wallet.sdk.model.asset.FncyCurrency
 import com.metaverse.world.wallet.sdk.model.etc.NFTOption
-import com.metaverse.world.wallet.sdk.model.nft.FncyNFT
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetByAssetId
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetList
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetsByCategory
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainAssetByContractAddress
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainInfo
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByNftId
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByOption
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetByAssetId
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetList
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetsByCategory
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqBlockchainAssetByContractAddress
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqBlockchainInfo
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqNftAssetByNftId
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqNftAssetByOption
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.asset.AssetInfoResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.asset.AssetResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.asset.ChainInfoResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.asset.CurrencyResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.nft.NFTResponse
 import com.metaverse.world.wallet.sdk.repository.network.response.toParamMap
 import com.metaverse.world.wallet.sdk.repository.network.service.FncyAssetAPI
 import retrofit2.Retrofit
@@ -25,44 +25,44 @@ internal interface FncyAssetDataSource {
     suspend fun requestAssetsByCategory(
         header: Map<String, String>,
         reqAssetsByCategory: ReqAssetsByCategory
-    ): FncyWalletResponse<List<FncyAsset>>
+    ): FncyWalletResponse<List<AssetResponse>>
 
     suspend fun requestAssetList(
         header: Map<String, String>,
         reqAssetList: ReqAssetList
-    ): FncyWalletResponse<List<FncyAsset>>
+    ): FncyWalletResponse<List<AssetResponse>>
 
     // 자산 단건 조회
     suspend fun requestAssetByAssetId(
         header: Map<String, String>,
         reqAssetByAssetId: ReqAssetByAssetId
-    ): FncyWalletResponse<List<FncyAsset>>
+    ): FncyWalletResponse<List<AssetResponse>>
 
     // 자산 환율 정보 요청
     suspend fun requestAssetCurrency(
         header: Map<String, String>,
-    ): FncyWalletResponse<List<FncyCurrency>>
+    ): FncyWalletResponse<List<CurrencyResponse>>
 
     suspend fun requestNftsByOption(
         header: Map<String, String>,
         reqNftAssetByOption: ReqNftAssetByOption
-    ): FncyWalletResponse<List<FncyNFT>>
+    ): FncyWalletResponse<List<NFTResponse>>
 
     // Nft 단건 조회
     suspend fun requestNftByNftId(
         header: Map<String, String>,
         reqNftAssetByNftId: ReqNftAssetByNftId
-    ): FncyWalletResponse<List<FncyNFT>>
+    ): FncyWalletResponse<List<NFTResponse>>
 
     suspend fun requestBlockchainPlatformAsset(
         header: Map<String, String>,
         reqBlockchainInfo: ReqBlockchainInfo
-    ): FncyWalletResponse<List<FncyChainInfo>>
+    ): FncyWalletResponse<List<ChainInfoResponse>>
 
     suspend fun requestBlockchainPlatformAssetList(
         header: Map<String, String>,
         reqBlockchainAssetByContractAddress: ReqBlockchainAssetByContractAddress
-    ): FncyWalletResponse<List<FncyAssetInfo>>
+    ): FncyWalletResponse<List<AssetInfoResponse>>
 }
 
 internal class FncyAssetDataSourceImpl(
@@ -76,7 +76,7 @@ internal class FncyAssetDataSourceImpl(
     override suspend fun requestAssetsByCategory(
         header: Map<String, String>,
         reqAssetsByCategory: ReqAssetsByCategory
-    ): FncyWalletResponse<List<FncyAsset>> {
+    ): FncyWalletResponse<List<AssetResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestAssetsWithCategory(
             header,
@@ -89,7 +89,7 @@ internal class FncyAssetDataSourceImpl(
     override suspend fun requestAssetList(
         header: Map<String, String>,
         reqAssetList: ReqAssetList
-    ): FncyWalletResponse<List<FncyAsset>> {
+    ): FncyWalletResponse<List<AssetResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestAssetList(
             header,
@@ -101,7 +101,7 @@ internal class FncyAssetDataSourceImpl(
     override suspend fun requestAssetByAssetId(
         header: Map<String, String>,
         reqAssetByAssetId: ReqAssetByAssetId
-    ): FncyWalletResponse<List<FncyAsset>> {
+    ): FncyWalletResponse<List<AssetResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestAssetByAssetId(
             header,
@@ -112,7 +112,7 @@ internal class FncyAssetDataSourceImpl(
 
     override suspend fun requestAssetCurrency(
         header: Map<String, String>
-    ): FncyWalletResponse<List<FncyCurrency>> {
+    ): FncyWalletResponse<List<CurrencyResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestAssetCurrency(
             header
@@ -122,7 +122,7 @@ internal class FncyAssetDataSourceImpl(
     override suspend fun requestNftsByOption(
         header: Map<String, String>,
         reqNftAssetByOption: ReqNftAssetByOption
-    ): FncyWalletResponse<List<FncyNFT>> {
+    ): FncyWalletResponse<List<NFTResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestNftsByWid(
             header,
@@ -135,7 +135,7 @@ internal class FncyAssetDataSourceImpl(
     override suspend fun requestNftByNftId(
         header: Map<String, String>,
         reqNftAssetByNftId: ReqNftAssetByNftId
-    ): FncyWalletResponse<List<FncyNFT>> {
+    ): FncyWalletResponse<List<NFTResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestNftByNftId(
             header,
@@ -147,7 +147,7 @@ internal class FncyAssetDataSourceImpl(
     override suspend fun requestBlockchainPlatformAsset(
         header: Map<String, String>,
         reqBlockchainInfo: ReqBlockchainInfo
-    ): FncyWalletResponse<List<FncyChainInfo>> {
+    ): FncyWalletResponse<List<ChainInfoResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestBlockchainPlatformAsset(
             header,
@@ -158,7 +158,7 @@ internal class FncyAssetDataSourceImpl(
     override suspend fun requestBlockchainPlatformAssetList(
         header: Map<String, String>,
         reqBlockchainAssetByContractAddress: ReqBlockchainAssetByContractAddress
-    ): FncyWalletResponse<List<FncyAssetInfo>> {
+    ): FncyWalletResponse<List<AssetInfoResponse>> {
         val fncyAsset = retrofit.create(FncyAssetAPI::class.java)
         return fncyAsset.requestBlockchainPlatformAssetList(
             header,

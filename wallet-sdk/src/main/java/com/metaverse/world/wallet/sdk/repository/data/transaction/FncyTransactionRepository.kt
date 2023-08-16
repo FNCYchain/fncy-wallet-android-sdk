@@ -2,16 +2,16 @@ package com.metaverse.world.wallet.sdk.repository.data.transaction
 
 import com.metaverse.world.wallet.sdk.crypto.FncyEncryptManager
 import com.metaverse.world.wallet.sdk.model.error.FncyException
-import com.metaverse.world.wallet.sdk.model.request.FncyRequest
-import com.metaverse.world.wallet.sdk.model.request.internal.ReqSendTransaction
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransaction
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransactionByTicket
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqTransactionTicketSend
+import com.metaverse.world.wallet.sdk.model.request.ReqSendTransaction
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTicket
 import com.metaverse.world.wallet.sdk.model.transaction.FncyTransactionTicket
-import com.metaverse.world.wallet.sdk.model.transaction.FncyTxId
 import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountDataSource
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
+import com.metaverse.world.wallet.sdk.repository.network.request.FncyRequest
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransaction
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransactionByTicket
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqTransactionTicketSend
+import com.metaverse.world.wallet.sdk.repository.network.response.transaction.asDomain
 import com.metaverse.world.wallet.sdk.utils.PinValidator
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
@@ -29,7 +29,7 @@ internal interface FncyTransactionRepository {
 
     suspend fun requestTransactionTicketSend(
         request: FncyRequest<ReqSendTransaction>
-    ): Result<FncyTxId>
+    ): Result<String>
 
     // 예상 전송 트랜젝션 정보 요청
     suspend fun requestTransactionEstimateInfo(
@@ -57,7 +57,7 @@ internal class FncyTransactionRepositoryImpl(
             )
         )
 
-        result.items?.first() ?: throw throw IllegalStateException("Ticket Error")
+        result.items?.first()?.asDomain() ?: throw throw IllegalStateException("Ticket Error")
 
     }
 
@@ -81,7 +81,7 @@ internal class FncyTransactionRepositoryImpl(
 
     override suspend fun requestTransactionTicketSend(
         request: FncyRequest<ReqSendTransaction>
-    ): Result<FncyTxId> = withContextRun(ioDispatcher) {
+    ): Result<String> = withContextRun(ioDispatcher) {
         check(pinValidator.valid(request.params.pinNumber)) {
             "Invalid pin number."
         }
@@ -107,7 +107,7 @@ internal class FncyTransactionRepositoryImpl(
             )
         )
 
-        FncyTxId(result.txId ?: throw IllegalStateException("TxHash is Null"))
+       result.txId ?: throw IllegalStateException("TxHash is Null")
 
     }
 
@@ -120,7 +120,7 @@ internal class FncyTransactionRepositoryImpl(
         )
 
         if (response.data?.result?.isSuccess == true) {
-            response.data.items?.first()
+            response.data.items?.first()?.asDomain()
                 ?: throw IllegalStateException("Gas Price is null")
         } else {
             throw FncyException(

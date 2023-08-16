@@ -1,6 +1,5 @@
 package com.metaverse.world.wallet.sdk.model.nft
 
-@kotlinx.serialization.Serializable
 data class FncyNFTInfo(
     val chainId: Long
 ) {
@@ -25,9 +24,4 @@ data class FncyNFTInfo(
     var nftMetaJson: String? = null
     var useYn: String? = null
     var nftDesc: String? = null
-    var btnSendtogameYn: String? = null
-    var btnNftsellYn: String? = null
-    var btnNftcancelYn: String? = null
-    var btnNftmodifyYn: String? = null
-    var binanceSaleYn: String? = null
 }

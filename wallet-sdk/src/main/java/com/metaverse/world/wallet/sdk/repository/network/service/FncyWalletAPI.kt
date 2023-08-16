@@ -1,20 +1,20 @@
 package com.metaverse.world.wallet.sdk.repository.network.service
 
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAnswerValidation
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqMessageSign
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordChange
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordChangeWithAnswer
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqPasswordValidation
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletAnswerCreation
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqWalletCreation
-import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
-import com.metaverse.world.wallet.sdk.model.wallet.FncyBalance
-import com.metaverse.world.wallet.sdk.model.wallet.FncyGasPrice
-import com.metaverse.world.wallet.sdk.model.wallet.FncyMessageSign
-import com.metaverse.world.wallet.sdk.model.wallet.FncyQuestion
-import com.metaverse.world.wallet.sdk.model.wallet.FncyWallet
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAnswerValidation
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqMessageSign
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqPasswordChange
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqPasswordChangeWithAnswer
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqPasswordValidation
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqWalletAnswerCreation
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqWalletCreation
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponse
 import com.metaverse.world.wallet.sdk.repository.network.response.FncyWalletResponseType2
+import com.metaverse.world.wallet.sdk.repository.network.response.transaction.TransactionResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.wallet.BalanceResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.wallet.GasPriceResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.wallet.MessageSignResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.wallet.QuestionResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.wallet.WalletResponse
 import retrofit2.http.*
 
 internal interface FncyWalletAPI {
@@ -22,19 +22,19 @@ internal interface FncyWalletAPI {
     @GET("v1/wallets")
     suspend fun requestWalletList(
         @HeaderMap header: Map<String, String>
-    ): FncyWalletResponse<List<FncyWallet>>
+    ): FncyWalletResponse<List<WalletResponse>>
 
     @GET("v1/wallets/{wid}")
     suspend fun requestWalletDetail(
         @HeaderMap header: Map<String, String>,
         @Path("wid") wid: Long
-    ): FncyWalletResponse<List<FncyWallet>>
+    ): FncyWalletResponse<List<WalletResponse>>
 
     @GET("/v1/wallets/{wid}/balance")
     suspend fun requestTotalWalletBalance(
         @HeaderMap header: Map<String, String>,
         @Path("wid") wid: Long
-    ): FncyWalletResponse<List<FncyBalance>>
+    ): FncyWalletResponse<List<BalanceResponse>>
 
     @POST("/v1/wallets/pin-check")
     suspend fun requestWalletPasswordValidation(
@@ -57,7 +57,7 @@ internal interface FncyWalletAPI {
     @GET("/v1/wallets/restore/questions")
     suspend fun requestWalletQuestion(
         @HeaderMap header: Map<String, String>
-    ): FncyWalletResponse<List<FncyQuestion>>
+    ): FncyWalletResponse<List<QuestionResponse>>
 
     @POST("/v1/wallets/answer-check")
     suspend fun requestWalletAnswerValidation(
@@ -75,7 +75,7 @@ internal interface FncyWalletAPI {
     suspend fun requestQuestions(
         @HeaderMap header: Map<String, String>,
         @QueryMap paging: Map<String, String>
-    ): FncyWalletResponse<List<FncyQuestion>>
+    ): FncyWalletResponse<List<QuestionResponse>>
 
     @POST("v2/wallets/{wid}/restore")
     suspend fun requestWalletAddRestoreKeyCreation(
@@ -94,14 +94,14 @@ internal interface FncyWalletAPI {
     suspend fun requestSmartGasPrice(
         @HeaderMap header: Map<String, String>,
         @Path("chainId") chainId: Long
-    ): FncyWalletResponse<List<FncyGasPrice>>
+    ): FncyWalletResponse<List<GasPriceResponse>>
 
     @GET("/v1/wallets/{wid}/assets/transfers/recent")
     suspend fun requestRecentTransferHistoryList(
         @HeaderMap header: Map<String, String>,
         @Path("wid") wid: Long,
         @QueryMap paging: Map<String, String>
-    ): FncyWalletResponse<List<FncyTransaction>>
+    ): FncyWalletResponse<List<TransactionResponse>>
 
     @GET("/v1/wallets/{wid}/assets/transfers")
     suspend fun requestTransferHistoryList(
@@ -109,20 +109,20 @@ internal interface FncyWalletAPI {
         @Path("wid") wid: Long,
         @QueryMap param: Map<String, String>,
         @QueryMap paging: Map<String, String>
-    ): FncyWalletResponse<List<FncyTransaction>>
+    ): FncyWalletResponse<List<TransactionResponse>>
 
     @GET("/v2/wallets/{wid}/assets/transfers/{historySeq}")
     suspend fun requestTransferDetailBySeq(
         @HeaderMap headerMap: Map<String, String>,
         @Path("wid") wid: Long,
         @Path("historySeq") transferSeq: Long,
-    ): FncyWalletResponse<List<FncyTransaction>>
+    ): FncyWalletResponse<List<TransactionResponse>>
 
     @POST("v1/wallets/{wid}/signature")
     suspend fun requestMessageSign(
         @HeaderMap header: Map<String, String>,
         @Path("wid") wid: Long,
         @Body params: ReqMessageSign
-    ): FncyWalletResponseType2<FncyMessageSign>
+    ): FncyWalletResponseType2<MessageSignResponse>
 
 }

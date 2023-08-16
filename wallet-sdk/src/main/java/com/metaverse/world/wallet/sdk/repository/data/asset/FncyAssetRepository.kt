@@ -5,18 +5,19 @@ import com.metaverse.world.wallet.sdk.model.asset.FncyAssetInfo
 import com.metaverse.world.wallet.sdk.model.asset.FncyChainInfo
 import com.metaverse.world.wallet.sdk.model.asset.FncyCurrency
 import com.metaverse.world.wallet.sdk.model.nft.FncyNFT
-import com.metaverse.world.wallet.sdk.model.request.FncyRequest
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetByAssetId
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetList
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqAssetsByCategory
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainAssetByContractAddress
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqBlockchainInfo
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByNftId
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.ReqNftAssetByOption
-import com.metaverse.world.wallet.sdk.model.request.internal.datasource.asByCategory
 import com.metaverse.world.wallet.sdk.repository.network.parser.ApiResultParser
+import com.metaverse.world.wallet.sdk.repository.network.request.FncyRequest
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetByAssetId
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetList
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetsByCategory
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqBlockchainAssetByContractAddress
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqBlockchainInfo
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqNftAssetByNftId
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqNftAssetByOption
+import com.metaverse.world.wallet.sdk.repository.network.request.internal.asByCategory
 import com.metaverse.world.wallet.sdk.repository.network.response.PagingData
-import com.metaverse.world.wallet.sdk.repository.network.response.toPagingResponse
+import com.metaverse.world.wallet.sdk.repository.network.response.asset.asDomain
+import com.metaverse.world.wallet.sdk.repository.network.response.nft.asDomain
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
 import kotlinx.coroutines.CoroutineDispatcher
@@ -72,7 +73,10 @@ internal class FncyAssetRepositoryImpl(
             )
         )
 
-        result.toPagingResponse()
+        PagingData(
+            result.items?.map { it.asDomain() },
+            requireNotNull(result.paging)
+        )
     }
 
     override suspend fun requestAssetList(
@@ -93,7 +97,10 @@ internal class FncyAssetRepositoryImpl(
                 }
             )
 
-            result.toPagingResponse()
+            PagingData(
+                result.items?.map { it.asDomain() },
+                requireNotNull(result.paging)
+            )
         }
 
     override suspend fun requestAssetByAssetId(
@@ -106,7 +113,7 @@ internal class FncyAssetRepositoryImpl(
             )
         )
 
-        result.items?.first()
+        result.items?.first()?.asDomain()
     }
 
     override suspend fun requestAssetCurrency(
@@ -119,7 +126,7 @@ internal class FncyAssetRepositoryImpl(
                 )
             )
 
-            result.items?.first()
+            result.items?.first()?.asDomain()
 
         }
 
@@ -134,7 +141,10 @@ internal class FncyAssetRepositoryImpl(
                 )
             )
 
-            result.toPagingResponse()
+            PagingData(
+                result.items?.map { it.asDomain() },
+                requireNotNull(result.paging)
+            )
         }
 
     override suspend fun requestNftAssetByNftId(
@@ -147,7 +157,7 @@ internal class FncyAssetRepositoryImpl(
             )
         )
 
-        result.items?.first()
+        result.items?.first()?.asDomain()
     }
 
     override suspend fun requestBlockchainPlatform(
@@ -161,7 +171,7 @@ internal class FncyAssetRepositoryImpl(
                 )
             )
 
-            result.items?.first()
+            result.items?.first()?.asDomain()
                 ?: throw IllegalStateException("Asset Id Not Found")
         }
 
@@ -175,7 +185,7 @@ internal class FncyAssetRepositoryImpl(
             )
         )
 
-        result.items
+        result.items?.map { it.asDomain() }
     }
 
 }
