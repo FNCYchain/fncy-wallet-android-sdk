@@ -1,6 +1,8 @@
+# FNCY Wallet SDK for Android
 
-## How to use FNCY Wallet SDK for Android?
-- [FNCY-gitbook](https://app.gitbook.com/o/sxbvsaQu6S0zvfR1DBLL/s/rtEQIDnbkvSB2krcokD0/~/changes/173/for-developers/fncy-mobile-app/fncy-wallet-sdk/android)
+## Minimum Requirement
+- Java 11+
+- Android API 23+
 
 
 ## Installation
@@ -55,6 +57,39 @@ Add proguard-rules:
 -keep class com.metaverse.world.wallet.sdk.repository.network.** { *; }
 ```
 
+## Getting Started
+
+``` kotlin
+class FncyApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+        FncyWalletSDK.initSDK(
+            application = this@FncyApplication,
+        )
+    }
+}
+```
+
+``` kotlin
+// In ViewModel
+class FncyViewModel() : ViewModel() {
+
+    fun getWallet() {
+        viewModelScope.launch {
+            val fncyWallet = FncyWalletSDK("token")
+            val result = fncyWallet.getWallet()
+            result
+                .onSuccess { wallet ->
+                    // 성공 처리
+                }.onFailure { throwable ->
+                    // 실패 처리
+                }
+        }
+    }
+
+} 
+```
 
 ## Dependent libraries
 fncy-wallet-android-sdk for Android uses libraries below:
@@ -68,6 +103,9 @@ fncy-wallet-android-sdk for Android uses libraries below:
 - org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1
 - io.insert-koin:koin-android:3.4.3
 
+
+## How to use FNCY Wallet SDK for Android?
+- [FNCY-gitbook](https://app.gitbook.com/o/sxbvsaQu6S0zvfR1DBLL/s/rtEQIDnbkvSB2krcokD0/~/changes/173/for-developers/fncy-mobile-app/fncy-wallet-sdk/android)
 
 <!--## License
 
