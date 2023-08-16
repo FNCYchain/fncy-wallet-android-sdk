@@ -13,7 +13,7 @@
 
 ## Installation
 
-Add the mavenCentral() on project level(root level) build.gradle file:
+### 1. Add the mavenCentral() on project level(root level) build.gradle file:
 ``` gradle
 allprojects {
     repositories {
@@ -22,24 +22,23 @@ allprojects {
 }
 ```
 
-Add dependency on module level build.gradle file:
+### 2. Add dependency on module level build.gradle file:
 
-### build.gradle
+#### build.gradle
 ``` groovy
 dependencies {
     implementation 'io.github.FNCYchain:fncy-wallet-android-sdk:0.1.0'
 }
 ```
 
-If using build.gradle.kts
-### build.gradle.kts
+#### build.gradle.kts
 ``` kotlin dsl
 dependencies {
     implementation("io.github.FNCYchain:fncy-wallet-android-sdk:0.1.0")
 }
 ```
 
-Add permission, meta-data to AndroidManifest.xml
+### 3. Add permission, meta-data to AndroidManifest.xml
 ``` xml
 <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -55,7 +54,7 @@ Add permission, meta-data to AndroidManifest.xml
 </application>
 ```
 
-Add proguard-rules:
+### 4. Add proguard-rules:
 [proguard-rules.pro](https://github.com/FNCYchain/fncy-wallet-android-sdk/blob/main/app/proguard-rules.pro)
 ```
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
@@ -109,7 +108,7 @@ fncy-wallet-android-sdk for Android uses libraries below:
 - org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1
 - io.insert-koin:koin-android:3.4.3
 
----
+
 
 ### [How to use FNCY Wallet SDK for Android?](https://app.gitbook.com/o/sxbvsaQu6S0zvfR1DBLL/s/rtEQIDnbkvSB2krcokD0/~/changes/173/for-developers/fncy-mobile-app/fncy-wallet-sdk/android)
 
