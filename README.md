@@ -107,6 +107,8 @@ fncy-wallet-android-sdk for Android uses libraries below:
 - com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0
 - org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1
 - io.insert-koin:koin-android:3.4.3
+- com.google.android.gms:play-services-auth:20.6.0
+- com.jakewharton.timber:timber:5.0.1
 
 
 
