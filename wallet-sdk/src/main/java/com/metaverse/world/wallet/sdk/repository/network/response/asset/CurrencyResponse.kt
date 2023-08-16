@@ -63,4 +63,6 @@ internal fun CurrencyResponse.asDomain() = FncyCurrency(
     it.displayDailyVolumeKrw = displayDailyVolumeKrw
     it.hourChange = hourChange
     it.dayChange = dayChange
+    it.projectLink = projectLink
+    it.whitePaperLink = whitePaperLink
 }
