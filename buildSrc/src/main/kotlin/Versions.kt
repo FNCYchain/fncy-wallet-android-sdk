@@ -1,5 +1,5 @@
 // Plugin
-const val gradleVersion = "8.0.1"
+const val gradleVersion = "8.1.0"
 const val kotlinVersion = "1.8.21"
 
 // App

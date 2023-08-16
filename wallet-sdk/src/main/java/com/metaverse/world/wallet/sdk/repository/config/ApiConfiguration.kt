@@ -1,5 +1,6 @@
 package com.metaverse.world.wallet.sdk.repository.config
 
+import com.metaverse.world.wallet.sdk.BuildConfig
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -37,9 +38,13 @@ internal class ApiConfiguration(
             chain.proceed(requestBuilder.build())
         }
 
-    val logInterceptor: Interceptor
-        get() = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+    val logInterceptor: Interceptor?
+        get() = if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        } else {
+            null
         }
 
      val connectTimeout: Long
@@ -50,8 +55,8 @@ internal class ApiConfiguration(
         get() = 60L
      val defaultHeader: suspend () -> Map<String, String> = {
         HashMap<String, String>().apply {
-//            put("user-agent", userAgent)
             put("Api-Key", apiKey)
+//            put("user-agent", userAgent)
 //            put("App-Session-Guid", deviceConfiguration.sessionGUID)
 //            put("App-Device-Udid", deviceConfiguration.deviceUDID)
 //            put("device-model", deviceConfiguration.deviceModel)

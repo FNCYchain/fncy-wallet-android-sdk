@@ -38,7 +38,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":wallet-sdk"))
+    implementation("io.github.FNCYchain:fncy-wallet-android-sdk:0.1.0")
+//    implementation(project(":wallet-sdk"))
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.appCompat)
     implementation(Dependencies.timber)

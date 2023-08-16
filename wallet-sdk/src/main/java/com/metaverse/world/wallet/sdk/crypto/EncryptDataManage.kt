@@ -11,8 +11,8 @@ internal class FncyEncryptManager(
     private fun getHashData(plainData: String, count: Int) =
         Hex.bytesToStringLowercase(fncyCryptoManager.getDuplicatedSha256(plainData, count))
 
-    fun encryptData(hash: String, rsaKey: String) =
-        encryptDataWithRsa(hash, rsaKey)
+//    fun encryptData(hash: String, rsaKey: String) =
+//        encryptDataWithRsa(hash, rsaKey)
 
     fun encrypt(plainData: String, rsaKey: String, count: Int) =
         encryptDataWithRsa(getHashData(plainData, count), rsaKey)

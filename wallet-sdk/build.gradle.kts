@@ -46,7 +46,7 @@ android {
 dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.kotlinSerialization)
-    implementation(group = "commons-codec", name = "commons-codec", version = "1.15")
+//    implementation(group = "commons-codec", name = "commons-codec", version = "1.15")
     retrofit()
     okHttp()
     coroutines()
