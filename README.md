@@ -109,9 +109,10 @@ fncy-wallet-android-sdk for Android uses libraries below:
 - org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1
 - io.insert-koin:koin-android:3.4.3
 
+---
 
-## How to use FNCY Wallet SDK for Android?
-- [FNCY-gitbook](https://app.gitbook.com/o/sxbvsaQu6S0zvfR1DBLL/s/rtEQIDnbkvSB2krcokD0/~/changes/173/for-developers/fncy-mobile-app/fncy-wallet-sdk/android)
+### [How to use FNCY Wallet SDK for Android?](https://app.gitbook.com/o/sxbvsaQu6S0zvfR1DBLL/s/rtEQIDnbkvSB2krcokD0/~/changes/173/for-developers/fncy-mobile-app/fncy-wallet-sdk/android)
+
 
 <!--## License
 
