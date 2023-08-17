@@ -96,7 +96,7 @@ class FncyViewModel() : ViewModel() {
 } 
 ```
 
-## Dependent libraries
+## Dependencies Library
 fncy-wallet-android-sdk for Android uses libraries below:
 
 - androidx.core:core-ktx:1.10.1
