@@ -1,9 +1,8 @@
 # FNCY Wallet SDK for Android
-[![Maven](https://img.shields.io/badge/0.1.2-version?label=maven&color=%23C71A36)](https://central.sonatype.com/artifact/io.github.FNCYchain/fncy-wallet-android-sdk/0.1.0/overview)
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.FNCYchain/fncy-wallet-android-sdk.svg)](https://search.maven.org/artifact/io.github.FNCYchain/fncy-wallet-android-sdk)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=23)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
-
 
 
 ## Minimum Requirement
@@ -27,14 +26,14 @@ allprojects {
 #### build.gradle
 ``` groovy
 dependencies {
-    implementation 'io.github.FNCYchain:fncy-wallet-android-sdk:0.1.0'
+    implementation "io.github.FNCYchain:fncy-wallet-android-sdk:$fncy_sdk_version"
 }
 ```
 
 #### build.gradle.kts
 ``` kotlin dsl
 dependencies {
-    implementation("io.github.FNCYchain:fncy-wallet-android-sdk:0.1.0")
+    implementation("io.github.FNCYchain:fncy-wallet-android-sdk:$fncySdkVersion")
 }
 ```
 
@@ -96,7 +95,7 @@ class FncyViewModel() : ViewModel() {
 } 
 ```
 
-## Dependent libraries
+## Dependencies Library
 fncy-wallet-android-sdk for Android uses libraries below:
 
 - androidx.core:core-ktx:1.10.1
