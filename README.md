@@ -1,12 +1,8 @@
 # FNCY Wallet SDK for Android
 
-
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.FNCYchain/fncy-wallet-android-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.FNCYchain/fncy-wallet-android-sdk)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.FNCYchain/fncy-wallet-android-sdk.svg)](https://search.maven.org/artifact/io.github.FNCYchain/fncy-wallet-android-sdk)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=23)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
-
 
 
 ## Minimum Requirement
