@@ -16,8 +16,11 @@ internal class RetrofitGenerator(
     private val apiConfiguration: ApiConfiguration
 ) {
 
+    private val _retrofit: Retrofit by lazy {
+        retrofitInit()
+    }
     val retrofit: Retrofit
-        get() = retrofitInit()
+        get() = _retrofit
 
     private fun retrofitInit(): Retrofit =
         runBlocking {
@@ -37,14 +40,11 @@ internal class RetrofitGenerator(
                 .readTimeout(apiConfiguration.readTimeout, TimeUnit.SECONDS) //읽기 타임아웃 시간 설정
                 .addInterceptor(apiConfiguration.headerInterceptor) // header 삽입
                 .build()
-//            apiConfiguration.logInterceptor?.let {
-//                okHttpClient.newBuilder().addInterceptor(it).build()
-//            }
+
             Retrofit.Builder()
                 .baseUrl(apiConfiguration.endPoint)
-                .client(
-                    okHttpClient
-                ).addConverterFactory(NullOnEmptyConverterFactory()) //Json Parser 추가
+                .client(okHttpClient)
+                .addConverterFactory(NullOnEmptyConverterFactory()) //Json Parser 추가
                 .addConverterFactory(
                     json.asConverterFactory("application/json".toMediaType())
                 ).build()

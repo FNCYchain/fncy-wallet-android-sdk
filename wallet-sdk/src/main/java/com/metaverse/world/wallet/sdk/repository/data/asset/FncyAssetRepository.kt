@@ -21,6 +21,7 @@ import com.metaverse.world.wallet.sdk.repository.network.response.nft.asDomain
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
 import kotlinx.coroutines.CoroutineDispatcher
+import timber.log.Timber
 
 internal interface FncyAssetRepository {
 
@@ -62,6 +63,10 @@ internal class FncyAssetRepositoryImpl(
     private val apiResultParser: ApiResultParser,
     private val ioDispatcher: CoroutineDispatcher
 ) : FncyAssetRepository {
+
+    init {
+        Timber.d("$this created.")
+    }
 
     override suspend fun requestAssetsByCategory(
         request: FncyRequest<ReqAssetsByCategory>

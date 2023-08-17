@@ -11,6 +11,7 @@ import com.metaverse.world.wallet.sdk.repository.network.response.transaction.Ti
 import com.metaverse.world.wallet.sdk.repository.network.response.transaction.TransactionResultResponse
 import com.metaverse.world.wallet.sdk.repository.network.service.FncyTransactionAPI
 import retrofit2.Retrofit
+import timber.log.Timber
 
 internal interface FncyTransactionDataSource {
 
@@ -42,6 +43,10 @@ internal interface FncyTransactionDataSource {
 internal class FncyTransactionDataSourceImpl(
     private val retrofit: Retrofit
 ): FncyTransactionDataSource {
+
+    init {
+        Timber.d("$this created.")
+    }
 
     override suspend fun requestTransactionByTicketUuId(
         header: HashMap<String, String>,

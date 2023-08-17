@@ -10,13 +10,16 @@ import timber.log.Timber
 
 internal fun <T> Flow<Result<T>>.catchFlowOn(ioDispatcher: CoroutineDispatcher): Flow<Result<T>> =
     this.catch { e ->
-        Timber.w("catch : $e")
+        Timber.w(e)
         e.printStackTrace()
         emit(Result.failure(e))
     }.flowOn(ioDispatcher)
 
 
-internal suspend fun <T> withContextRun(dispatcher: CoroutineDispatcher, block: suspend CoroutineScope.() -> T): Result<T> = runCatching {
+internal suspend fun <T> withContextRun(
+    dispatcher: CoroutineDispatcher,
+    block: suspend CoroutineScope.() -> T
+): Result<T> = runCatching {
     withContext(dispatcher) {
         block()
     }

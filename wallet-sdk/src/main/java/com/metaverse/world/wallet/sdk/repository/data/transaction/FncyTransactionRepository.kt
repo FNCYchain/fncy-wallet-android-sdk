@@ -16,6 +16,7 @@ import com.metaverse.world.wallet.sdk.utils.PinValidator
 import com.metaverse.world.wallet.sdk.utils.toHeader
 import com.metaverse.world.wallet.sdk.utils.withContextRun
 import kotlinx.coroutines.CoroutineDispatcher
+import timber.log.Timber
 
 internal interface FncyTransactionRepository {
 
@@ -46,6 +47,10 @@ internal class FncyTransactionRepositoryImpl(
     private val pinValidator: PinValidator,
     private val ioDispatcher: CoroutineDispatcher,
 ) : FncyTransactionRepository {
+
+    init {
+        Timber.d("$this created.")
+    }
 
     override suspend fun requestTransactionByTicket(
         request: FncyRequest<ReqTransactionByTicket>

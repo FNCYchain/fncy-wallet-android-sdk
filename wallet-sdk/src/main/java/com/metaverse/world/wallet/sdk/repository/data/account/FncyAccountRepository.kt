@@ -34,7 +34,7 @@ internal class FncyAccountRepositoryImpl(
 ) : FncyAccountRepository {
 
     init {
-        Timber.w("$this created.")
+        Timber.d("$this created.")
     }
 
     override suspend fun insertUser(

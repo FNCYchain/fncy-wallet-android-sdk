@@ -13,7 +13,7 @@ internal class ApiConfiguration(
 ) {
 
     init {
-        Timber.w("$this created.")
+        Timber.d("$this created.")
     }
 
     val endPoint: String

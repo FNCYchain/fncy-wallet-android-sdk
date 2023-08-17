@@ -31,7 +31,7 @@ internal class FncyAccountDataSourceImpl(
     private val retrofit: Retrofit,
 ) : FncyAccountDataSource {
     init {
-        Timber.w("$this created.")
+        Timber.d("$this created.")
     }
     override suspend fun insertUser(authorizationTokenHeader: HashMap<String, String>): FncyWalletResponse<Unit> {
         val fncyAccountAPI = retrofit.create(FncyAccountAPI::class.java)

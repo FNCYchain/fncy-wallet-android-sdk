@@ -123,13 +123,15 @@ internal class FncyWalletRepositoryImpl(
     private val fncyWalletDataSource: FncyWalletDataSource,
     private val fncyAccountDataSource: FncyAccountDataSource,
     private val apiResultParser: ApiResultParser,
-    private val fncyEncryptManager: FncyEncryptManager,
+    private val encryptManager: FncyEncryptManager,
     private val pinValidator: PinValidator,
     private val ioDispatcher: CoroutineDispatcher,
 ) : FncyWalletRepository, KoinComponent {
+
     init {
-        Timber.w("$this created.")
+        Timber.d("$this created.")
     }
+
     override suspend fun requestWallet(
         request: FncyRequest<Unit>
     ): Result<FncyWallet?> = withContextRun(ioDispatcher) {
@@ -179,7 +181,7 @@ internal class FncyWalletRepositoryImpl(
             )
         ).userRsaPubKey
 
-        val encryptPin = fncyEncryptManager.encrypt(
+        val encryptPin = encryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 2
@@ -208,7 +210,7 @@ internal class FncyWalletRepositoryImpl(
             )
         ).userRsaPubKey
 
-        val encryptPin = fncyEncryptManager.encrypt(
+        val encryptPin = encryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -242,13 +244,13 @@ internal class FncyWalletRepositoryImpl(
             )
         ).userRsaPubKey
 
-        val encryptPin = fncyEncryptManager.encrypt(
+        val encryptPin = encryptManager.encrypt(
             plainData = request.params.oldPinNumber,
             rsaKey = rsaKey,
             count = 1
         )
 
-        val encryptNewPin = fncyEncryptManager.encrypt(
+        val encryptNewPin = encryptManager.encrypt(
             plainData = request.params.newPinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -287,13 +289,13 @@ internal class FncyWalletRepositoryImpl(
             )
         ).userRsaPubKey
 
-        val encryptAnswer = fncyEncryptManager.encrypt(
+        val encryptAnswer = encryptManager.encrypt(
             plainData = request.params.answer.lowercase(),
             rsaKey = rsaKey,
             count = 2
         )
 
-        val encryptAnswerAlter = fncyEncryptManager.encrypt(
+        val encryptAnswerAlter = encryptManager.encrypt(
             plainData = request.params.answer,
             rsaKey = rsaKey,
             count = 2
@@ -322,17 +324,17 @@ internal class FncyWalletRepositoryImpl(
                 )
         ).userRsaPubKey
 
-        val encryptAnswer = fncyEncryptManager.encrypt(
+        val encryptAnswer = encryptManager.encrypt(
             plainData = request.params.answer.lowercase(),
             rsaKey = rsaKey,
             count = 1
         )
-        val encryptAnswerAlter = fncyEncryptManager.encrypt(
+        val encryptAnswerAlter = encryptManager.encrypt(
             plainData = request.params.answer,
             rsaKey = rsaKey,
             count = 1
         )
-        val encryptNewPin = fncyEncryptManager.encrypt(
+        val encryptNewPin = encryptManager.encrypt(
             plainData = request.params.newPinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -379,19 +381,19 @@ internal class FncyWalletRepositoryImpl(
             )
         ).userRsaPubKey
 
-        val encryptQuestion = fncyEncryptManager.encrypt(
+        val encryptQuestion = encryptManager.encrypt(
             plainData = request.params.userQuestionSeq.toString(),
             rsaKey = rsaKey,
             count = 1
         )
 
-        val encryptAnswer = fncyEncryptManager.encrypt(
+        val encryptAnswer = encryptManager.encrypt(
             plainData = request.params.userAnswer,
             rsaKey = rsaKey,
             count = 1
         )
 
-        val encryptPin = fncyEncryptManager.encrypt(
+        val encryptPin = encryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 1
@@ -480,7 +482,7 @@ internal class FncyWalletRepositoryImpl(
             )
         ).userRsaPubKey
 
-        val encryptPin = fncyEncryptManager.encrypt(
+        val encryptPin = encryptManager.encrypt(
             plainData = request.params.pinNumber,
             rsaKey = rsaKey,
             count = 1

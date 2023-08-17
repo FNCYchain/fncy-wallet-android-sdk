@@ -21,6 +21,7 @@ import com.metaverse.world.wallet.sdk.repository.network.response.wallet.Questio
 import com.metaverse.world.wallet.sdk.repository.network.response.wallet.WalletResponse
 import com.metaverse.world.wallet.sdk.repository.network.service.FncyWalletAPI
 import retrofit2.Retrofit
+import timber.log.Timber
 
 internal interface FncyWalletDataSource {
 
@@ -123,6 +124,10 @@ internal interface FncyWalletDataSource {
 internal class FncyWalletDataSourceImpl(
     private val retrofit: Retrofit
 ): FncyWalletDataSource {
+
+    init {
+        Timber.d("$this created.")
+    }
 
     override suspend fun requestWalletList(header: Map<String, String>): FncyWalletResponse<List<WalletResponse>> {
         val fncyWallet = retrofit.create(FncyWalletAPI::class.java)

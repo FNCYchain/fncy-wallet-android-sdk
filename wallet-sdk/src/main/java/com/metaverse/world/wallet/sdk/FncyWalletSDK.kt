@@ -480,5 +480,4 @@ class FncyWalletSDK constructor(
         )
     )
 
-
 }

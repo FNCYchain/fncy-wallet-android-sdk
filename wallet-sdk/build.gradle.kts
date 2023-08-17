@@ -21,6 +21,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -56,6 +59,8 @@ dependencies {
     dokkaPlugin(Dependencies.dokka)
     kotest()
     androidTest()
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 }
 
 val properties = gradleLocalProperties(rootDir)

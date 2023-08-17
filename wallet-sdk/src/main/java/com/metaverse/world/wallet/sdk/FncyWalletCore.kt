@@ -46,6 +46,7 @@ internal object FncyWalletCore { // Singleton
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
+        Timber.d("$this created.")
         with(koinApp) {
             androidContext(application)
             modules(
