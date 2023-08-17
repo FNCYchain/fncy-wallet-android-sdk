@@ -112,8 +112,8 @@ fncy-wallet-android-sdk for Android uses libraries below:
 
 
 
-### [How to use FNCY Wallet SDK for Android?](https://app.gitbook.com/o/sxbvsaQu6S0zvfR1DBLL/s/rtEQIDnbkvSB2krcokD0/~/changes/173/for-developers/fncy-mobile-app/fncy-wallet-sdk/android)
-
+## How to use FNCY Wallet SDK for Android?
+[FNCY-GitBook](https://app.gitbook.com/o/sxbvsaQu6S0zvfR1DBLL/s/rtEQIDnbkvSB2krcokD0/~/changes/173/for-developers/fncy-mobile-app/fncy-wallet-sdk/android)
 
 <!--## License
 
