@@ -3,7 +3,6 @@ package com.metaverse.world.wallet.sdk
 import android.app.Application
 import com.metaverse.world.wallet.sdk.model.etc.InOut
 import com.metaverse.world.wallet.sdk.model.etc.NFTOption
-import com.metaverse.world.wallet.sdk.model.etc.NFTType
 import com.metaverse.world.wallet.sdk.model.etc.SignType
 import com.metaverse.world.wallet.sdk.model.etc.TicketType
 import com.metaverse.world.wallet.sdk.repository.network.request.FncyRequest
@@ -337,8 +336,7 @@ class FncyWalletSDK constructor(
 
     suspend fun getNFTList(
         wid: Long,
-        option: NFTOption? = null,
-        nftType: NFTType? = null,
+        filter: NFTOption? = null,
         pageNo: Int = 1,
         pageSize: Int = 20
     ) = assetRepo.requestNftsByOption(
@@ -346,8 +344,7 @@ class FncyWalletSDK constructor(
             accessToken = accessToken,
             params = ReqNftAssetByOption(
                 wid = wid,
-                option = option,
-                nftType = nftType,
+                option = filter,
                 paging = Paging(
                     pageNo = pageNo,
                     pageSize = pageSize

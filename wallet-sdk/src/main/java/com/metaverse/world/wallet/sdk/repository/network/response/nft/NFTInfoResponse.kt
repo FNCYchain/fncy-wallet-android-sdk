@@ -48,9 +48,9 @@ internal fun NFTInfoResponse.asDomain() = FncyNFTInfo(
     it.holderAuthYn = holderAuthYn
     it.nftHolderAuthDirectLink = nftHolderAuthDirectLink
     it.marketId = marketId
-    it.nftMetaInfo = nftMetaInfo?.asDomain()
     it.attributes = attributes?.map { attrs -> attrs.asDomain() }
     it.nftMetaJson = nftMetaJson
-    it.useYn = useYn
     it.nftDesc = nftDesc
+//    it.useYn = useYn
+//    it.nftMetaInfo = nftMetaInfo?.asDomain()
 }

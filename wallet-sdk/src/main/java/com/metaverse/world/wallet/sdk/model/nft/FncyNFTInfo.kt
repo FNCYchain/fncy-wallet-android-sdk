@@ -19,9 +19,9 @@ data class FncyNFTInfo(
     var holderAuthYn: String? = null
     var nftHolderAuthDirectLink: String? = null
     var marketId: String? = null
-    var nftMetaInfo: FncyNFTMetaInfo? = null
     var attributes: List<FncyNFTAttribute>? = null
     var nftMetaJson: String? = null
-    var useYn: String? = null
     var nftDesc: String? = null
+//    var useYn: String? = null
+//    var nftMetaInfo: FncyNFTMetaInfo? = null
 }

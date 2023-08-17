@@ -1,6 +1,6 @@
 package com.metaverse.world.wallet.sdk.model.etc
 
-enum class NFTType(
+internal enum class NFTType(
     val value: String
 ) {
     BASIC("basic"),
