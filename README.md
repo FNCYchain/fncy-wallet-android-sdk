@@ -26,14 +26,14 @@ allprojects {
 #### build.gradle
 ``` groovy
 dependencies {
-    implementation 'io.github.FNCYchain:fncy-wallet-android-sdk:0.1.3'
+    implementation "io.github.FNCYchain:fncy-wallet-android-sdk:$fncy_sdk_version"
 }
 ```
 
 #### build.gradle.kts
 ``` kotlin dsl
 dependencies {
-    implementation("io.github.FNCYchain:fncy-wallet-android-sdk:0.1.3")
+    implementation("io.github.FNCYchain:fncy-wallet-android-sdk:$fncySdkVersion")
 }
 ```
 
