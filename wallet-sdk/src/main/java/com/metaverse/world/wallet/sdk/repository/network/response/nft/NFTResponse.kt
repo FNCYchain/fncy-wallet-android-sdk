@@ -1,5 +1,7 @@
 package com.metaverse.world.wallet.sdk.repository.network.response.nft
 
+import com.metaverse.world.wallet.sdk.model.nft.FncyNFT
+
 @kotlinx.serialization.Serializable
 internal data class NFTResponse(
     val nftId: Long
@@ -13,7 +15,7 @@ internal data class NFTResponse(
     var nftInfo: NFTInfoResponse? = null
 }
 
-internal fun NFTResponse.asDomain() = com.metaverse.world.wallet.sdk.model.nft.FncyNFT(
+internal fun NFTResponse.asDomain() = FncyNFT(
     nftId = nftId,
 ).also {
     it.wid = wid

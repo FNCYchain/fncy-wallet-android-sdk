@@ -1,5 +1,6 @@
 package com.metaverse.world.wallet.sdk.repository.network.response.transaction
 
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction
 import com.metaverse.world.wallet.sdk.repository.network.response.asset.AssetInfoResponse
 import com.metaverse.world.wallet.sdk.repository.network.response.asset.asDomain
 
@@ -36,7 +37,7 @@ internal data class TransactionResponse(
     var historyKst: String? = null
 }
 
-internal fun TransactionResponse.asDomain() = com.metaverse.world.wallet.sdk.model.transaction.FncyTransaction(
+internal fun TransactionResponse.asDomain() = FncyTransaction(
     historySeq = historySeq,
     wid = wid,
     walletAddress = walletAddress,

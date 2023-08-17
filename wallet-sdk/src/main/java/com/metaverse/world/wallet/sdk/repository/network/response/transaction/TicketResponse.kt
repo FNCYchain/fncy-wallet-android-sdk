@@ -1,5 +1,7 @@
 package com.metaverse.world.wallet.sdk.repository.network.response.transaction
 
+import com.metaverse.world.wallet.sdk.model.etc.TicketType
+import com.metaverse.world.wallet.sdk.model.transaction.FncyTicket
 import com.metaverse.world.wallet.sdk.repository.network.serialization.BigIntegerSerializer
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
@@ -43,9 +45,9 @@ internal data class TicketResponse(
     val errorMessage: String? = null
 )
 
-internal fun TicketResponse.asDomain() = com.metaverse.world.wallet.sdk.model.transaction.FncyTicket(
+internal fun TicketResponse.asDomain() = FncyTicket(
     wid = wid,
-    signatureType = signatureType,
+    signatureType = signatureType?.toTicketType(),
     transferFrom = transferFrom,
     transferTo = transferTo,
     transferVal = transferVal,
@@ -63,3 +65,9 @@ internal fun TicketResponse.asDomain() = com.metaverse.world.wallet.sdk.model.tr
     ticketHash = ticketHash,
 )
 
+private fun String.toTicketType() = when (this) {
+    TicketType.AssetTransfer.value -> TicketType.AssetTransfer
+    TicketType.WalletConnect.value -> TicketType.WalletConnect
+    TicketType.SmartContract.value -> TicketType.SmartContract
+    else -> throw IllegalArgumentException("Unknown ticket type: $this")
+}

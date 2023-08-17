@@ -1,10 +1,11 @@
 package com.metaverse.world.wallet.sdk.model.transaction
 
+import com.metaverse.world.wallet.sdk.model.etc.TicketType
 import java.math.BigInteger
 
 data class FncyTicket(
     val wid: Long = 0,
-    val signatureType: String? = null,
+    val signatureType: TicketType? = null,
     val transferFrom: String? = null,
     val transferTo: String? = null,
     val transferVal: BigInteger? = null,
