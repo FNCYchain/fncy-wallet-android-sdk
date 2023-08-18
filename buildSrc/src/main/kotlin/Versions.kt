@@ -20,7 +20,7 @@ const val coreKtxVersion = "1.10.1"
 const val kotlinSerializationJsonVersion = "1.2.1"
 
 // Dependencies
-const val coroutineVersion = "1.7.1"
+const val coroutineVersion = "1.7.2"
 const val retrofitVersion = "2.9.0"
 const val okHttpVersion = "4.11.0"
 //const val okHttpUrlConnectorVersion = "3.4.2"

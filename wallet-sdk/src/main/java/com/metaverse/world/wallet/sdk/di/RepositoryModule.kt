@@ -12,19 +12,19 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 internal fun repositoryModule() = module {
-    factory<FncyWalletRepository> {
+    single<FncyWalletRepository> {
         FncyWalletRepositoryImpl(get(), get(), get(), get(), get(), get(named("IoDispatcher")))
     }
 
-    factory<FncyAccountRepository> {
+    single<FncyAccountRepository> {
         FncyAccountRepositoryImpl(get(), get(), get(named("IoDispatcher")))
     }
 
-    factory<FncyAssetRepository> {
+    single<FncyAssetRepository> {
         FncyAssetRepositoryImpl(get(), get(), get(named("IoDispatcher")))
     }
 
-    factory<FncyTransactionRepository> {
+    single<FncyTransactionRepository> {
         FncyTransactionRepositoryImpl(get(), get(), get(), get(), get(), get(named("IoDispatcher")))
     }
 }
