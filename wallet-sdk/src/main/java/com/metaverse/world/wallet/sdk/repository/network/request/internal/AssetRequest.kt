@@ -35,7 +35,7 @@ internal data class ReqAssetByAssetId(
  */
 internal data class ReqNftAssetByOption(
     val wid: Long,
-    val option: NFTOption? = null,
+    val option: NFTOption = NFTOption.All,
     val nftType: NFTType? = null,
     val paging: Paging = Paging()
 )

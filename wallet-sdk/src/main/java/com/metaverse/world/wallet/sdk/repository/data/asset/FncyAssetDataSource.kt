@@ -193,15 +193,9 @@ private fun FncyAssetCategory.toMap() =
 
 private fun Boolean.toParam() = if (this) "Y" else "N"
 
-private fun ReqNftAssetByOption.toParamMap(): Map<String, String> {
-    val list = mutableListOf<Pair<String, String>>()
-    option?.let {
-        when (it) {
-            NFTOption.ForSale, NFTOption.InStock -> list.add("ownerOf" to it.value)
-            else -> {}
-        }
-    }
+private fun ReqNftAssetByOption.toParamMap(): Map<String, String> = option.value?.let {
+        mapOf("ownerOf" to it)
+    } ?: emptyMap()
 
-    return mapOf(*list.toTypedArray())
-}
+
 
