@@ -6,7 +6,6 @@
 
 
 ## Minimum Requirement
-- Java 11+
 - Android API 23+
 
 
@@ -26,7 +25,7 @@ allprojects {
 #### build.gradle
 ``` groovy
 dependencies {
-    implementation "io.github.FNCYchain:fncy-wallet-android-sdk:$latestVersion"
+    implementation 'io.github.FNCYchain:fncy-wallet-android-sdk:latestVersion'
 }
 ```
 
@@ -37,23 +36,7 @@ dependencies {
 }
 ```
 
-### 3. Add permission, meta-data to AndroidManifest.xml
-``` xml
-<uses-permission android:name="android.permission.INTERNET"/>
-
-<application
-    ...
-<!-- meta-data의 Key값은 반드시 다음과 같이 작성 -->
-        <meta-data
-            android:name="com.metaverse.world.fncy.ApiKey"
-            android:value="@string/api_key"/>
-        <meta-data
-            android:name="com.metaverse.world.fncy.BaseUrl"
-            android:value="@string/base_url"/>
-</application>
-```
-
-### 4. Add proguard-rules:
+### 3. Add proguard-rules:
 [proguard-rules.pro](https://github.com/FNCYchain/fncy-wallet-android-sdk/blob/main/app/proguard-rules.pro)
 ```
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
@@ -69,7 +52,7 @@ class FncyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         FncyWalletSDK.initSDK(
-            application = this@FncyApplication,
+            environment = Environment.Testnet // Testnet or Mainnet
         )
     }
 }
