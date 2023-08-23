@@ -1,6 +1,7 @@
 package com.metaverse.world.wallet.sdk.repository.config
 
 import com.metaverse.world.wallet.sdk.BuildConfig
+import com.metaverse.world.wallet.sdk.utils.FncyApiKey
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -9,7 +10,6 @@ import timber.log.Timber
 
 internal class ApiConfiguration(
     private val baseUrl: String,
-    private val apiKey: String,
 ) {
 
     init {
@@ -55,7 +55,7 @@ internal class ApiConfiguration(
         get() = 60L
      val defaultHeader: suspend () -> Map<String, String> = {
         HashMap<String, String>().apply {
-            put("Api-Key", apiKey)
+            put("Api-Key", FncyApiKey)
 //            put("user-agent", userAgent)
 //            put("App-Session-Guid", deviceConfiguration.sessionGUID)
 //            put("App-Device-Udid", deviceConfiguration.deviceUDID)

@@ -1,6 +1,7 @@
 package com.metaverse.world.wallet.sdk
 
-import android.app.Application
+import com.metaverse.world.wallet.sdk.FncyWalletCore.koinApp
+import com.metaverse.world.wallet.sdk.model.common.Environment
 import com.metaverse.world.wallet.sdk.model.etc.InOut
 import com.metaverse.world.wallet.sdk.model.etc.NFTOption
 import com.metaverse.world.wallet.sdk.model.etc.SignType
@@ -13,7 +14,11 @@ import com.metaverse.world.wallet.sdk.model.request.ReqRegisterRestorationKey
 import com.metaverse.world.wallet.sdk.model.request.ReqResetWalletPin
 import com.metaverse.world.wallet.sdk.model.request.ReqSendRestoreAnswer
 import com.metaverse.world.wallet.sdk.model.request.ReqSendTransaction
+import com.metaverse.world.wallet.sdk.repository.data.account.FncyAccountRepository
 import com.metaverse.world.wallet.sdk.repository.data.asset.FncyAssetCategory
+import com.metaverse.world.wallet.sdk.repository.data.asset.FncyAssetRepository
+import com.metaverse.world.wallet.sdk.repository.data.transaction.FncyTransactionRepository
+import com.metaverse.world.wallet.sdk.repository.data.wallet.FncyWalletRepository
 import com.metaverse.world.wallet.sdk.repository.network.request.FncyRequest
 import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetByAssetId
 import com.metaverse.world.wallet.sdk.repository.network.request.internal.ReqAssetList
@@ -36,10 +41,26 @@ class FncyWalletSDK constructor(
     private val accessToken: String
 ) {
 
+    private val accountRepository: FncyAccountRepository by lazy {
+        koinApp.koin.get()
+    }
+
+    private val walletRepository: FncyWalletRepository by lazy {
+        koinApp.koin.get()
+    }
+
+    private val assetRepository: FncyAssetRepository by lazy {
+        koinApp.koin.get()
+    }
+
+    private val transactionRepository: FncyTransactionRepository by lazy {
+        koinApp.koin.get()
+    }
+
     companion object {
         @JvmStatic
-        fun initSDK(application: Application) {
-            FncyWalletCore.initialize(application)
+        fun initSDK(environment: Environment) {
+            FncyWalletCore.initialize(environment)
         }
     }
 
@@ -47,8 +68,7 @@ class FncyWalletSDK constructor(
      *         Account        *
      **************************/
 
-    suspend fun insertUser() = FncyWalletCore
-        .accountRepository
+    suspend fun insertUser() = accountRepository
         .insertUser(
             FncyRequest(
                 accessToken = accessToken,
@@ -58,8 +78,7 @@ class FncyWalletSDK constructor(
 
     suspend fun logoutUser(
         uuid: String
-    ) = FncyWalletCore
-        .accountRepository
+    ) = accountRepository
         .requestRemoveDeviceToken(
             FncyRequest(
                 accessToken = accessToken,
@@ -69,8 +88,7 @@ class FncyWalletSDK constructor(
             )
         )
 
-    suspend fun getRSAKey() = FncyWalletCore
-        .accountRepository
+    suspend fun getRSAKey() = accountRepository
         .requestRsaKey(
             FncyRequest(
                 accessToken = accessToken,
@@ -82,8 +100,7 @@ class FncyWalletSDK constructor(
      *         Wallet         *
      **************************/
 
-    suspend fun getWallet() = FncyWalletCore
-        .walletRepository
+    suspend fun getWallet() = walletRepository
         .requestWallet(
             FncyRequest(
                 accessToken = accessToken,
@@ -93,8 +110,7 @@ class FncyWalletSDK constructor(
 
     suspend fun getWalletAllBalance(
         wid: Long
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestTotalWalletBalance(
             FncyRequest(
                 accessToken = accessToken,
@@ -107,8 +123,7 @@ class FncyWalletSDK constructor(
     suspend fun makeWallet(
         walletName: String,
         pinNumber: String
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestWalletCreation(
             FncyRequest(
                 accessToken = accessToken,
@@ -124,8 +139,7 @@ class FncyWalletSDK constructor(
         userQuestionSeq: Int,
         userAnswer: String,
         pinNumber: String
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestWalletAnswerCreation(
             FncyRequest(
                 accessToken = accessToken,
@@ -141,8 +155,7 @@ class FncyWalletSDK constructor(
     suspend fun postResetQuestion(
         answer: String,
         newPinNumber: String
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestWalletPasswordChangeWithAnswer(
             FncyRequest(
                 accessToken = accessToken,
@@ -155,8 +168,7 @@ class FncyWalletSDK constructor(
 
     suspend fun checkWalletPinNumber(
         pinNumber: String
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestPasswordValidation(
             FncyRequest(
                 accessToken = accessToken,
@@ -170,8 +182,7 @@ class FncyWalletSDK constructor(
     suspend fun postResetPinNumber(
         oldPinNumber: String,
         newPinNumber: String
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestWalletPasswordChange(
             FncyRequest(
                 accessToken = accessToken,
@@ -185,8 +196,7 @@ class FncyWalletSDK constructor(
     suspend fun getQuestionList(
         pageNo: Int = 1,
         pageSize: Int = 20
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestWalletQuestions(
             FncyRequest(
                 accessToken = accessToken,
@@ -199,8 +209,7 @@ class FncyWalletSDK constructor(
 
     suspend fun checkResetAnswer(
         answer: String
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestWalletAnswerValidation(
             FncyRequest(
                 accessToken = accessToken,
@@ -211,8 +220,7 @@ class FncyWalletSDK constructor(
         )
 
     suspend fun getResetQuestion(
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestChosenWalletQuestion(
             FncyRequest(
                 accessToken = accessToken,
@@ -225,8 +233,7 @@ class FncyWalletSDK constructor(
         dataToSign: String,
         signType: SignType = SignType.EthSign,
         pinNumber: String
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestMessageSign(
             FncyRequest(
                 accessToken = accessToken,
@@ -241,8 +248,7 @@ class FncyWalletSDK constructor(
 
     suspend fun getGasPrice(
         chainId: Long
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestSmartGasPrice(
             FncyRequest(
                 accessToken = accessToken,
@@ -254,8 +260,7 @@ class FncyWalletSDK constructor(
 
     suspend fun getRecentAddress(
         wid: Long
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestRecentTransferHistoryList(
             FncyRequest(
                 accessToken = accessToken,
@@ -272,8 +277,7 @@ class FncyWalletSDK constructor(
         pageNo: Int = 1,
         pageSize: Int = 20,
         filter: InOut,
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestTransferHistoryList(
             FncyRequest(
                 accessToken = accessToken,
@@ -292,8 +296,7 @@ class FncyWalletSDK constructor(
     suspend fun getTransferHistoryDetail(
         wid: Long,
         historySeq: Long
-    ) = FncyWalletCore
-        .walletRepository
+    ) = walletRepository
         .requestTransferDetailBySeq(
             FncyRequest(
                 accessToken = accessToken,
@@ -311,8 +314,7 @@ class FncyWalletSDK constructor(
 
     suspend fun getBlockChainInfo(
         chainId: Long
-    ) = FncyWalletCore
-        .assetRepository
+    ) = assetRepository
         .requestBlockchainPlatform(
             FncyRequest(
                 accessToken = accessToken,
@@ -325,8 +327,7 @@ class FncyWalletSDK constructor(
     suspend fun getContractInfo(
         chainId: Long,
         contractAddress: String
-    ) = FncyWalletCore
-        .assetRepository
+    ) = assetRepository
         .requestBlockchainPlatformAssetList(
             FncyRequest(
                 accessToken = accessToken,
@@ -337,8 +338,7 @@ class FncyWalletSDK constructor(
             )
         )
 
-    suspend fun getFncyInfo() = FncyWalletCore
-        .assetRepository
+    suspend fun getFncyInfo() = assetRepository
         .requestAssetCurrency(
             FncyRequest(
                 accessToken = accessToken,
@@ -348,8 +348,7 @@ class FncyWalletSDK constructor(
 
     suspend fun getAssetList(
         wid: Long
-    ) = FncyWalletCore
-        .assetRepository
+    ) = assetRepository
         .requestAssetList(
             FncyRequest(
                 accessToken = accessToken,
@@ -363,8 +362,7 @@ class FncyWalletSDK constructor(
     suspend fun getAssetById(
         wid: Long,
         assetId: Long
-    ) = FncyWalletCore
-        .assetRepository
+    ) = assetRepository
         .requestAssetByAssetId(
             FncyRequest(
                 accessToken = accessToken,
@@ -380,8 +378,7 @@ class FncyWalletSDK constructor(
         filter: NFTOption = NFTOption.All,
         pageNo: Int = 1,
         pageSize: Int = 20
-    ) = FncyWalletCore
-        .assetRepository
+    ) = assetRepository
         .requestNftsByOption(
             FncyRequest(
                 accessToken = accessToken,
@@ -399,8 +396,7 @@ class FncyWalletSDK constructor(
     suspend fun getNFTById(
         wid: Long,
         nftId: Long
-    ) = FncyWalletCore
-        .assetRepository
+    ) = assetRepository
         .requestNftAssetByNftId(
             FncyRequest(
                 accessToken = accessToken,
@@ -429,8 +425,7 @@ class FncyWalletSDK constructor(
         maxPriorityPerGas: BigInteger = BigInteger.ZERO,
         maxFeePerGas: BigInteger = BigInteger.ZERO,
         txNonce: Long = 0,
-    ) = FncyWalletCore
-        .transactionRepository
+    ) = transactionRepository
         .requestTransactionEstimateInfo(
             FncyRequest(
                 accessToken = accessToken,
@@ -474,8 +469,7 @@ class FncyWalletSDK constructor(
         tokenId: Long = 0,
         maxPriorityPerGas: BigInteger = BigInteger.ZERO,
         maxFeePerGas: BigInteger = BigInteger.ZERO
-    ) = FncyWalletCore
-        .transactionRepository
+    ) = transactionRepository
         .requestTransactionTicket(
             FncyRequest(
                 accessToken = accessToken,
@@ -505,8 +499,7 @@ class FncyWalletSDK constructor(
     suspend fun sendTicket(
         ticketUuid: String,
         pinNumber: String
-    ) = FncyWalletCore
-        .transactionRepository
+    ) = transactionRepository
         .requestTransactionTicketSend(
             FncyRequest(
                 accessToken = accessToken,
@@ -519,8 +512,7 @@ class FncyWalletSDK constructor(
 
     suspend fun getTicketInfo(
         ticketUuid: String
-    ) = FncyWalletCore
-        .transactionRepository
+    ) = transactionRepository
         .requestTransactionByTicket(
             FncyRequest(
                 accessToken = accessToken,
